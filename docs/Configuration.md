@@ -3,7 +3,7 @@ Configuration
 
 Settings
 ---
-To configure `RedisMemoryCacheInvalidation`, you should use one of the `InvalidationManager.ConfigureAsync` methods. 
+To configure `RedisMemoryCacheInvalidationCore`, you should use one of the `InvalidationManager.ConfigureAsync` methods. 
 Three parameters are available to configure it : 
 
 - __redisConfig:string__ : Redis connection string. Check [StackExchange.Redis Configuration model](https://github.com/StackExchange/StackExchange.Redis/blob/master/Docs/Configuration.md) for more details. A basic example is `localhost:6379`.

@@ -1,38 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net472;net462</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1,netstandard2.0;net472;net462</TargetFrameworks>
     <AssemblyTitle>RedisMemoryCacheInvalidation</AssemblyTitle>
-    <Company>Cybermaxs</Company>
-    <Author>Cybermaxs</Author>
+    <Company>RedisMemoryCacheInvalidation - Core</Company>
+    <Author>RedisMemoryCacheInvalidation - Core</Author>
     <Product>RedisMemoryCacheInvalidation</Product>
-    <Copyright>Copyright © Lemaitre 2018</Copyright>
+    <Copyright>2014-2020 Chris McKee, Lemaitre/Cybermaxs</Copyright>
     <OutputTypeEx>Library</OutputTypeEx>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IncludeSource>true</IncludeSource>
 
-    <PackageId>RedisMemoryCacheInvalidation</PackageId>
-    <Title>RedisMemoryCacheInvalidation</Title>
+    <PackageId>RedisMemoryCacheInvalidationCore</PackageId>
+    <Title>RedisMemoryCacheInvalidationCore</Title>
     <Summary>A redis-powered local memory cache invalidation mechanism.</Summary>
     <Description>This package allow to invalidate local memory cache items with the help of StackExchange.Redis</Description>
 
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-  </PropertyGroup>
+
   <PropertyGroup>
-    <ProjectGuid>{13467724-727B-44CA-BE9D-19BFC4599B34}</ProjectGuid>
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
+    <Deterministic>false</Deterministic>
   </PropertyGroup>
+ 
   <ItemGroup>
-    <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
-    <PackageReference Include="System.Runtime.Caching" Version="4.5.0" />
+    <PackageReference Include="StackExchange.Redis" Version="2.1.58" />
+    <PackageReference Include="System.Runtime.Caching" Version="4.7.0" />
   </ItemGroup>
 
 </Project>

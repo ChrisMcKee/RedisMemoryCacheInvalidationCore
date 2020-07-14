@@ -11,7 +11,7 @@ This works very well for most common use cases, but there is a hidden trade-off:
 
 Another common problem is how to update/remove instantly something from the cache on all your cache clients, such as this typical request from Product Owner ” I want a parameter to be instantly updated on all our XXX servers, but do not fear, I will only change it a few times per year”
 
-Here comes `RedisMemoryCacheInlivation` : a small library that will help you to invalidate one or more items in you local memory cache.
+Here comes `RedisMemoryCacheInvalidation` : a small library that will help you to invalidate one or more items in you local memory cache.
 
 Supports .net 4.0 and later.
 Supports any kind of .net application (asp.net WebForms & MVC, WPF & WinForms, Console, ...).

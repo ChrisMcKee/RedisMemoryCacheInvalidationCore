@@ -57,7 +57,7 @@ namespace RedisMemoryCacheInvalidation.Redis
             foreach (var endpoint in endpoints)
             {
                 var server = multiplexer.GetServer(endpoint);
-                if (server.IsSlave || !server.IsConnected) continue;
+                if (server.IsReplica || !server.IsConnected) continue;
                 if (result != null) throw new InvalidOperationException("Requires exactly one master endpoint (found " + server.EndPoint + " and " + result.EndPoint + ")");
                 result = server;
             }
