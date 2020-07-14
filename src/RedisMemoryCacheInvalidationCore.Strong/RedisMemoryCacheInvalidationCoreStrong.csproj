@@ -8,20 +8,32 @@
     <Copyright>2014-2020 Chris McKee, Lemaitre/Cybermaxs</Copyright>
     <OutputTypeEx>Library</OutputTypeEx>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <IncludeSource>true</IncludeSource>
+    <IncludeSource>false</IncludeSource>
 
-    <PackageId>RedisMemoryCacheInvalidationCore</PackageId>
-    <Title>RedisMemoryCacheInvalidationCore</Title>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+    <PackageId>RedisMemoryCacheInvalidationCoreStrong</PackageId>
+    <Title>RedisMemoryCacheInvalidationCore Strong Signed</Title>
     <Summary>A redis-powered local memory cache invalidation mechanism.</Summary>
     <Description>This package allow to invalidate local memory cache items with the help of StackExchange.Redis</Description>
-
+    
     <Version>2.0.2</Version>
   </PropertyGroup>
 
   <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <Deterministic>false</Deterministic>
+    <AssemblyOriginatorKeyFile>RedisMemoryCacheInvalidationCoreStrong.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
- 
+
+  <ItemGroup>
+    <Compile Include="..\RedisMemoryCacheInvalidation\**\*.cs" Exclude="..\RedisMemoryCacheInvalidation\obj\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="..\RedisMemoryCacheInvalidation\Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="StackExchange.Redis" Version="2.1.58" />
     <PackageReference Include="System.Runtime.Caching" Version="4.7.0" />
