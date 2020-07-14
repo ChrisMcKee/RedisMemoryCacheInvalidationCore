@@ -1,5 +1,7 @@
-RedisMemoryCacheInvalidation
+RedisMemoryCacheInvalidation - Core
 ============================
+
+A migration and changes to RedisMemoryCacheInvalidation as PRs were going stale and the package appears abandoned.
 
 [![Nuget](https://img.shields.io/nuget/dt/RedisMemoryCacheInvalidationCore.svg)](http://nuget.org/packages/RedisMemoryCacheInvalidationCore)
 [![Nuget](https://img.shields.io/nuget/v/RedisMemoryCacheInvalidationCore.svg)](http://nuget.org/packages/RedisMemoryCacheInvalidationCore)
@@ -38,10 +40,10 @@ Once an invalidation message is intercepted by the library, you can invalidate o
 - `InvalidationStrategyType.External` => use the callback configured at `InvalidationSettings.InvalidationCallback`
 
 __Read more__
-- [Overview] (https://github.com/Cybermaxs/RedisMemoryCacheInvalidation/blob/master/docs/Overview.md)
-- [Working with Redis] (https://github.com/Cybermaxs/RedisMemoryCacheInvalidation/blob/master/docs/Redis.md)
-- [Configuration] (https://github.com/Cybermaxs/RedisMemoryCacheInvalidation/blob/master/docs/Configuration.md)
-- [Examples] (https://github.com/Cybermaxs/RedisMemoryCacheInvalidation/blob/master/docs/Examples.md)
+- [Overview] (https://github.com/ChrisMcKee/RedisMemoryCacheInvalidationCore/blob/master/docs/Overview.md)
+- [Working with Redis] (https://github.com/ChrisMcKee/RedisMemoryCacheInvalidationCore/blob/master/docs/Redis.md)
+- [Configuration] (https://github.com/ChrisMcKee/RedisMemoryCacheInvalidationCore/blob/master/docs/Configuration.md)
+- [Examples] (https://github.com/ChrisMcKee/RedisMemoryCacheInvalidationCore/blob/master/docs/Examples.md)
 
 How it works ?
 ---
@@ -51,10 +53,4 @@ License
 ---
 Licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT)
 
-Want to contribute ?
----
-- Beginner => Download, Star, Comment/Tweet, Kudo, ...
-- Amateur => Ask for help, send feature request, send bugs
-- Pro => Pull request, promote
 
-Thank you

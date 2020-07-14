@@ -16,9 +16,20 @@
     <Title>RedisMemoryCacheInvalidationCore</Title>
     <Summary>A redis-powered local memory cache invalidation mechanism.</Summary>
     <Description>This package allow to invalidate local memory cache items with the help of StackExchange.Redis</Description>
-
+    
+    <PackageTags>redis,cache,invalidation</PackageTags>
+    <PackageProjectUrl>https://github.com/ChrisMcKee/RedisMemoryCacheInvalidationCore</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ChrisMcKee/RedisMemoryCacheInvalidationCore</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+<!--    <PackageLicenseFile>LICENSE</PackageLicenseFile>-->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    
     <Version>2.0.2</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE" />
+  </ItemGroup>
 
   <PropertyGroup>
     <Deterministic>false</Deterministic>
