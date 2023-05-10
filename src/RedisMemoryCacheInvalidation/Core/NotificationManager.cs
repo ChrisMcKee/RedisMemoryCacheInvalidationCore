@@ -1,8 +1,8 @@
-﻿using RedisMemoryCacheInvalidation.Core.Interfaces;
-using RedisMemoryCacheInvalidation.Utils;
-using System;
-using System.Linq;
+﻿using System;
 using System.Collections.Concurrent;
+using System.Linq;
+using RedisMemoryCacheInvalidation.Core.Interfaces;
+using RedisMemoryCacheInvalidation.Utils;
 
 namespace RedisMemoryCacheInvalidation.Core
 {
@@ -21,9 +21,9 @@ namespace RedisMemoryCacheInvalidation.Core
         {
             var subscriptions = SubscriptionsByTopic.GetOrAdd(topicKey, new SynchronizedCollection<INotificationObserver<string>>());
 
-            if (subscriptions.Count <= 0) return;
+            if(subscriptions.Count <= 0) return;
 
-            foreach (INotificationObserver<string> observer in subscriptions.ToList()) //avoid collection modified
+            foreach(INotificationObserver<string> observer in subscriptions.ToList()) //avoid collection modified
             {
                 observer.Notify(topicKey);
             }
@@ -33,7 +33,7 @@ namespace RedisMemoryCacheInvalidation.Core
         {
             var subscriptions = SubscriptionsByTopic.GetOrAdd(topicKey, new SynchronizedCollection<INotificationObserver<string>>());
 
-            if (!subscriptions.Contains(observer))
+            if(!subscriptions.Contains(observer))
                 subscriptions.Add(observer);
 
             return new Unsubscriber(subscriptions, observer);

@@ -1,11 +1,11 @@
-﻿using RedisMemoryCacheInvalidation.Monitor;
-using RedisMemoryCacheInvalidation.Tests;
-using RedisMemoryCacheInvalidation.Tests.Fixtures;
-using System;
+﻿using System;
 using System.Runtime.Caching;
 using System.Text;
 using System.Threading;
 using AutoFixture;
+using RedisMemoryCacheInvalidation.Monitor;
+using RedisMemoryCacheInvalidation.Tests;
+using RedisMemoryCacheInvalidation.Tests.Fixtures;
 using Xunit;
 
 namespace RedisMemoryCacheInvalidation.Integration.Tests
@@ -26,10 +26,12 @@ namespace RedisMemoryCacheInvalidation.Integration.Tests
             redis = redisServer;
 
             InvalidationManager.NotificationBus = null;
-            InvalidationManager.Configure(redis.GetEndpoint(), new InvalidationSettings {
+            InvalidationManager.Configure(redis.GetEndpoint(), new InvalidationSettings
+            {
                 InvalidationStrategy = InvalidationStrategyType.All,
                 EnableKeySpaceNotifications = true,
-                TargetCache = localCache });
+                TargetCache = localCache
+            });
 
             fixture = new Fixture();
         }
@@ -121,7 +123,7 @@ namespace RedisMemoryCacheInvalidation.Integration.Tests
             {
                 AbsoluteExpiration = DateTime.UtcNow.AddDays(1)
             };
-            if (monitor != null)
+            if(monitor != null)
                 policy.ChangeMonitors.Add(monitor);
             target.Add(cacheItem, policy);
             return cacheItem;

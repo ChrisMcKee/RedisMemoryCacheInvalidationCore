@@ -17,7 +17,8 @@ namespace RedisMemoryCacheInvalidation.Tests.Integration
             //test more disconnected scenarios
             InvalidationManager.Configure("blabblou", new InvalidationSettings());
             Assert.False(InvalidationManager.IsConnected);
-            Assert.ThrowsAsync<InvalidOperationException>(async () => {
+            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            {
                 var published = InvalidationManager.InvalidateAsync("mykey").Result;
             });
         }

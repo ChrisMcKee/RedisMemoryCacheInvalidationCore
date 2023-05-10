@@ -1,6 +1,6 @@
-﻿using Moq;
-using System;
+﻿using System;
 using System.Runtime.Caching;
+using Moq;
 using Xunit;
 
 namespace RedisMemoryCacheInvalidation.Tests

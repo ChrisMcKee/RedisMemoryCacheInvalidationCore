@@ -1,8 +1,8 @@
 Overview
 =
 
-We need to use all the tools at our disposal to develop faster and more robust applications. 
-One of the ways we can achieve this is by using caching. Previously, under the `System.Web.Caching.Cache` namespace, the new  -4.0- `System.Runtime.Caching.Memory` is more mature and still as powerful as its ancestor. 
+We need to use all the tools at our disposal to develop faster and more robust applications.
+One of the ways we can achieve this is by using caching. Previously, under the `System.Web.Caching.Cache` namespace, the new  -4.0- `System.Runtime.Caching.Memory` is more mature and still as powerful as its ancestor.
 It’s really easy to use and I think that every asp.net programmers have already used it.
 
 The default caching strategy is the cache-aside programming pattern: This means that if your data is not present in the cache, your application, and not something else, must reload data into the cache from the original data source.
@@ -17,4 +17,4 @@ Supports .net 4.0 and later.
 Supports any kind of .net application (asp.net WebForms & MVC, WPF & WinForms, Console, ...).
 
 As the name suggests, this implementation relies on [Redis](http://redis.io/), especially on [PubSub feature](http://redis.io/topics/pubsub).
-In the current version of this implemention, __nothing is stored__ on the Redis server.
+In the current version of this implementation, __nothing is stored__ on the Redis server.

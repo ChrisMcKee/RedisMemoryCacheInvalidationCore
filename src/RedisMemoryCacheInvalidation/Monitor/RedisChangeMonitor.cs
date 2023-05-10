@@ -1,9 +1,9 @@
-﻿using RedisMemoryCacheInvalidation.Core;
-using RedisMemoryCacheInvalidation.Core.Interfaces;
-using RedisMemoryCacheInvalidation.Utils;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Runtime.Caching;
+using RedisMemoryCacheInvalidation.Core;
+using RedisMemoryCacheInvalidation.Core.Interfaces;
+using RedisMemoryCacheInvalidation.Utils;
 
 namespace RedisMemoryCacheInvalidation.Monitor
 {
@@ -30,7 +30,7 @@ namespace RedisMemoryCacheInvalidation.Monitor
                 _key = key;
                 flag = false;
             }
-            catch (Exception)
+            catch(Exception)
             {
                 //any error
                 flag = true;
@@ -38,7 +38,7 @@ namespace RedisMemoryCacheInvalidation.Monitor
             finally
             {
                 InitializationComplete();
-                if (flag)
+                if(flag)
                 {
                     base.Dispose();
                 }
@@ -55,7 +55,7 @@ namespace RedisMemoryCacheInvalidation.Monitor
 
         public void Notify(string value)
         {
-            if (value == _key)
+            if(value == _key)
             {
                 OnChanged(null);
             }

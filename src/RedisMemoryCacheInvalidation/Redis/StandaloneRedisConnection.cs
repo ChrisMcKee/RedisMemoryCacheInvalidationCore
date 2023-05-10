@@ -1,6 +1,6 @@
-﻿using StackExchange.Redis;
-using System;
+﻿using System;
 using System.Reflection;
+using StackExchange.Redis;
 
 namespace RedisMemoryCacheInvalidation.Redis
 {
@@ -14,9 +14,9 @@ namespace RedisMemoryCacheInvalidation.Redis
 
         public override bool Connect()
         {
-            if (multiplexer == null)
+            if(multiplexer == null)
             {
-                //myope overrides here
+                //overrides here
                 options.ConnectTimeout = 5000;
                 options.ConnectRetry = 3;
                 options.DefaultVersion = new Version("2.8.0");

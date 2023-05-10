@@ -3,9 +3,9 @@ using StackExchange.Redis;
 
 namespace RedisMemoryCacheInvalidation.Redis
 {
-    internal class ExistingRedisConnnection : RedisConnectionBase
+    internal class ExistingRedisConnection : RedisConnectionBase
     {
-        public ExistingRedisConnnection(IConnectionMultiplexer mux)
+        public ExistingRedisConnection(IConnectionMultiplexer mux)
         {
             multiplexer = mux;
         }

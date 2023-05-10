@@ -1,10 +1,10 @@
-﻿using Moq;
-using StackExchange.Redis;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using AutoFixture;
-using Xunit;
+using Moq;
 using RedisMemoryCacheInvalidation.Redis;
+using StackExchange.Redis;
+using Xunit;
 
 namespace RedisMemoryCacheInvalidation.Tests.Redis
 {
@@ -28,7 +28,7 @@ namespace RedisMemoryCacheInvalidation.Tests.Redis
             mockOfMux.Setup(c => c.Close(false));
             mockOfMux.Setup(c => c.GetSubscriber(It.IsAny<object>())).Returns(this.mockOfSubscriber.Object);
 
-            cnx = new ExistingRedisConnnection(mockOfMux.Object);
+            cnx = new ExistingRedisConnection(mockOfMux.Object);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace RedisMemoryCacheInvalidation.Tests.Redis
             Assert.False(connected);
 
             //subscribe
-            cnx.Subscribe("channel", (c, v) => { }) ;
+            cnx.Subscribe("channel", (c, v) => { });
 
             //getconfig
             var config = cnx.GetConfigAsync().Result;

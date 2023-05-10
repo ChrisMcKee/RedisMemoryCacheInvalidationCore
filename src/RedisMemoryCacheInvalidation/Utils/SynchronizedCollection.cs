@@ -23,12 +23,12 @@ namespace RedisMemoryCacheInvalidation.Utils
 
         public int Count
         {
-            get { lock (sync) { return items.Count; } }
+            get { lock(sync) { return items.Count; } }
         }
 
         public void Add(T item)
         {
-            lock (sync)
+            lock(sync)
             {
                 int index = items.Count;
                 items.Insert(index, item);
@@ -37,7 +37,7 @@ namespace RedisMemoryCacheInvalidation.Utils
 
         public void Clear()
         {
-            lock (sync)
+            lock(sync)
             {
                 items.Clear();
             }
@@ -45,7 +45,7 @@ namespace RedisMemoryCacheInvalidation.Utils
 
         public void CopyTo(T[] array, int index)
         {
-            lock (sync)
+            lock(sync)
             {
                 items.CopyTo(array, index);
             }
@@ -53,7 +53,7 @@ namespace RedisMemoryCacheInvalidation.Utils
 
         public bool Contains(T item)
         {
-            lock (sync)
+            lock(sync)
             {
                 return items.Contains(item);
             }
@@ -61,7 +61,7 @@ namespace RedisMemoryCacheInvalidation.Utils
 
         public IEnumerator<T> GetEnumerator()
         {
-            lock (sync)
+            lock(sync)
             {
                 return items.GetEnumerator();
             }
@@ -71,9 +71,9 @@ namespace RedisMemoryCacheInvalidation.Utils
         {
             int count = items.Count;
 
-            for (int i = 0; i < count; i++)
+            for(int i = 0; i < count; i++)
             {
-                if (Equals(items[i], item))
+                if(Equals(items[i], item))
                 {
                     return i;
                 }
@@ -83,10 +83,10 @@ namespace RedisMemoryCacheInvalidation.Utils
 
         public bool Remove(T item)
         {
-            lock (sync)
+            lock(sync)
             {
                 int index = InternalIndexOf(item);
-                if (index < 0)
+                if(index < 0)
                     return false;
 
                 items.RemoveAt(index);

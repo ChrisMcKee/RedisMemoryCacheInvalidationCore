@@ -1,6 +1,6 @@
-﻿using RedisMemoryCacheInvalidation.Core.Interfaces;
+﻿using System;
+using RedisMemoryCacheInvalidation.Core.Interfaces;
 using RedisMemoryCacheInvalidation.Utils;
-using System;
 
 namespace RedisMemoryCacheInvalidation.Core
 {
@@ -20,7 +20,7 @@ namespace RedisMemoryCacheInvalidation.Core
 
         public void Dispose()
         {
-            if (observer != null && observers.Contains(observer))
+            if(observer != null && observers.Contains(observer))
                 observers.Remove(observer);
         }
     }

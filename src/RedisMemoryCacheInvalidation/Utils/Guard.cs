@@ -13,7 +13,7 @@ namespace RedisMemoryCacheInvalidation.Utils
         /// <param name="parameterName">nameof the parameter (for ArgumentNullException)</param>
         public static void NotNull(object parameter, string parameterName)
         {
-            if (parameter == null)
+            if(parameter == null)
                 throw new ArgumentNullException(parameterName);
         }
 
@@ -25,7 +25,7 @@ namespace RedisMemoryCacheInvalidation.Utils
         /// <param name="parameterName">nameof the parameter (for ArgumentNullException)</param>
         public static void NotDefault<T>(T parameter, string parameterName)
         {
-            if (EqualityComparer<T>.Default.Equals(parameter, default(T)))
+            if(EqualityComparer<T>.Default.Equals(parameter, default(T)))
                 throw new ArgumentNullException(parameterName);
         }
 
@@ -38,7 +38,7 @@ namespace RedisMemoryCacheInvalidation.Utils
         /// <param name="parameterName">nameof the parameter (for ArgumentNullException)</param>
         public static void NotNullOrEmpty(string parameter, string parameterName)
         {
-            if (string.IsNullOrEmpty(parameter))
+            if(string.IsNullOrEmpty(parameter))
                 throw new ArgumentNullException(parameterName);
         }
     }

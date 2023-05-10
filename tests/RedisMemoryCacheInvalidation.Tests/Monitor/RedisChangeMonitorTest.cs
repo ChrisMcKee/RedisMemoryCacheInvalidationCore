@@ -1,9 +1,9 @@
-﻿using Moq;
+﻿using System;
+using AutoFixture;
+using Moq;
 using RedisMemoryCacheInvalidation.Core;
 using RedisMemoryCacheInvalidation.Core.Interfaces;
 using RedisMemoryCacheInvalidation.Monitor;
-using System;
-using AutoFixture;
 using Xunit;
 
 namespace RedisMemoryCacheInvalidation.Tests.Monitor

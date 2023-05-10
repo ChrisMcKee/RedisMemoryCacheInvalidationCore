@@ -1,5 +1,5 @@
-﻿using RedisMemoryCacheInvalidation.Core.Interfaces;
-using System;
+﻿using System;
+using RedisMemoryCacheInvalidation.Core.Interfaces;
 
 namespace RedisMemoryCacheInvalidation.Core
 {

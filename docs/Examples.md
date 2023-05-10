@@ -3,10 +3,10 @@ How to use
 
 Once RedisMemoryCacheInvalidation is configured, local cache invalidation is a two-steps process : capturing invalidation messages and handling those notification messages.
 
-
 Sending invalidation messages
 ---
-You can use one of the folowing methods.
+
+You can use one of the following methods.
 
 - Send a pubsub message from any redis client `PUBLISH invalidate onemessagekey`.
 - Send an invalidation message from `InvalidationManager.InvalidateAsync("onemessagekey")`
@@ -14,14 +14,15 @@ You can use one of the folowing methods.
 
 Handling notification messages
 ---
+
 This behavior is entirely configured via `InvalidationSettings.InvalidationStrategyType`. As it's marked with a FlagsAttribute, you can use one or more strategies.
 
 - Automatically removed a cache item from the cache
 
-The easiest way to invalidate local cache items. If the  The core will try to remove cache items 
+The easiest way to invalidate local cache items. If the  The core will try to remove cache items
 For example, if you add a cache item like this :
 
-```
+```csharp
 CacheItem cacheItem = new CacheItem("mycacheKey", "cachevalue");
 CacheItemPolicy policy = new CacheItemPolicy();
 policy.AbsoluteExpiration = DateTime.UtcNow.AddDays(1);
@@ -36,7 +37,7 @@ Calling  `PUBLISH invalidate mycacheKey` or `InvalidationManager.InvalidateAsync
 
 You can create a custom monitor (watching for `myinvalidationKey`) like this :
 
-```
+```csharp
 CacheItem cacheItem = new CacheItem("cacheKey", "cachevalue");
 CacheItemPolicy policy = new CacheItemPolicy();
 policy.AbsoluteExpiration = DateTime.UtcNow.AddDays(1);

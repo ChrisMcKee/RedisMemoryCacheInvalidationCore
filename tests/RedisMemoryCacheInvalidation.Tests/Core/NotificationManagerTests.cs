@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using AutoFixture;
+using Moq;
 using RedisMemoryCacheInvalidation.Core;
 using RedisMemoryCacheInvalidation.Core.Interfaces;
-using Moq;
 using Xunit;
 
 namespace RedisMemoryCacheInvalidation.Tests.Core
@@ -10,10 +10,10 @@ namespace RedisMemoryCacheInvalidation.Tests.Core
     public class NotificationManagerTests
     {
         private Fixture fixture = new Fixture();
-        private readonly string topciKey;
+        private readonly string topicKey;
         public NotificationManagerTests()
         {
-            topciKey = fixture.Create<string>();
+            topicKey = fixture.Create<string>();
         }
         [Fact]
         [Trait(TestConstants.TestCategory, TestConstants.UnitTestCategory)]
@@ -21,11 +21,11 @@ namespace RedisMemoryCacheInvalidation.Tests.Core
         {
             var mockOfObserver = new Mock<INotificationObserver<string>>();
             var notifier = new NotificationManager();
-            var res = notifier.Subscribe(topciKey, mockOfObserver.Object);
+            var res = notifier.Subscribe(topicKey, mockOfObserver.Object);
 
             Assert.NotNull(res);
             Assert.Equal(1, notifier.SubscriptionsByTopic.Values.Count);
-            Assert.Contains(mockOfObserver.Object, notifier.SubscriptionsByTopic.Values.SelectMany(e=>e));
+            Assert.Contains(mockOfObserver.Object, notifier.SubscriptionsByTopic.Values.SelectMany(e => e));
             Assert.IsType<Unsubscriber>(res);
         }
 
@@ -35,8 +35,8 @@ namespace RedisMemoryCacheInvalidation.Tests.Core
         {
             var mockOfObserver = new Mock<INotificationObserver<string>>();
             var notifier = new NotificationManager();
-            var res1 = notifier.Subscribe(topciKey, mockOfObserver.Object);
-            var res2 = notifier.Subscribe(topciKey, mockOfObserver.Object);
+            var res1 = notifier.Subscribe(topicKey, mockOfObserver.Object);
+            var res2 = notifier.Subscribe(topicKey, mockOfObserver.Object);
 
             Assert.NotNull(res1);
             Assert.NotSame(res1, res2);
@@ -52,10 +52,10 @@ namespace RedisMemoryCacheInvalidation.Tests.Core
             var mockOfObserver1 = new Mock<INotificationObserver<string>>();
             var mockOfObserver2 = new Mock<INotificationObserver<string>>();
             var notifier = new NotificationManager();
-            var res1 = notifier.Subscribe(topciKey, mockOfObserver1.Object);
-            var res2 = notifier.Subscribe(topciKey, mockOfObserver2.Object);
+            var res1 = notifier.Subscribe(topicKey, mockOfObserver1.Object);
+            var res2 = notifier.Subscribe(topicKey, mockOfObserver2.Object);
 
-            notifier.Notify(topciKey);
+            notifier.Notify(topicKey);
 
             Assert.True(notifier.SubscriptionsByTopic.Values.SelectMany(e => e).Any());
         }

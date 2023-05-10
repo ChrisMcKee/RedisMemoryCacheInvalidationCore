@@ -27,7 +27,7 @@ namespace RedisMemoryCacheInvalidation.Tests.Fixtures
 
         public void Dispose()
         {
-            if (mux != null && mux.IsConnected)
+            if(mux != null && mux.IsConnected)
                 mux.Close(false);
             redis.Dispose();
         }

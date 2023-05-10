@@ -1,10 +1,10 @@
-﻿using RedisMemoryCacheInvalidation.Core;
+﻿using System;
+using System.Runtime.Caching;
+using System.Threading.Tasks;
+using RedisMemoryCacheInvalidation.Core;
 using RedisMemoryCacheInvalidation.Monitor;
 using RedisMemoryCacheInvalidation.Utils;
 using StackExchange.Redis;
-using System;
-using System.Runtime.Caching;
-using System.Threading.Tasks;
 
 namespace RedisMemoryCacheInvalidation
 {
@@ -19,7 +19,7 @@ namespace RedisMemoryCacheInvalidation
         /// <summary>
         /// Redis connection state : connected or not.
         /// </summary>
-        public static bool IsConnected => NotificationBus!=null && NotificationBus.Connection.IsConnected;
+        public static bool IsConnected => NotificationBus != null && NotificationBus.Connection.IsConnected;
 
         /// <summary>
         /// Use to Configure Redis MemoryCache Invalidation.
@@ -30,7 +30,7 @@ namespace RedisMemoryCacheInvalidation
         /// <returns>Task when connection is opened and subscribed to pubsub events.</returns>
         public static void Configure(string redisConfig, InvalidationSettings settings)
         {
-            if (NotificationBus == null)
+            if(NotificationBus == null)
             {
                 NotificationBus = new RedisNotificationBus(redisConfig, settings);
                 NotificationBus.Start();
@@ -45,7 +45,7 @@ namespace RedisMemoryCacheInvalidation
         /// <returns>Task when connection is opened and subscribed to pubsub events.</returns>
         public static void Configure(ConnectionMultiplexer mux, InvalidationSettings settings)
         {
-            if (NotificationBus == null)
+            if(NotificationBus == null)
             {
                 NotificationBus = new RedisNotificationBus(mux, settings);
                 NotificationBus.Start();
@@ -63,7 +63,7 @@ namespace RedisMemoryCacheInvalidation
 
             EnsureConfiguration();
 
-            if (NotificationBus.InvalidationStrategy == InvalidationStrategyType.AutoCacheRemoval)
+            if(NotificationBus.InvalidationStrategy == InvalidationStrategyType.AutoCacheRemoval)
                 throw new InvalidOperationException("Could not create a change monitor when InvalidationStrategy is DefaultMemoryCacheRemoval");
 
             return new RedisChangeMonitor(NotificationBus.Notifier, invalidationKey);
@@ -100,7 +100,7 @@ namespace RedisMemoryCacheInvalidation
 
         private static void EnsureConfiguration()
         {
-            if (NotificationBus == null)
+            if(NotificationBus == null)
                 throw new InvalidOperationException("Configure() was not called");
         }
     }

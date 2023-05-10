@@ -6,7 +6,7 @@ namespace RedisMemoryCacheInvalidation.Redis
     {
         public static IRedisConnection New(IConnectionMultiplexer mux)
         {
-            return new ExistingRedisConnnection(mux);
+            return new ExistingRedisConnection(mux);
         }
 
         public static IRedisConnection New(string options)

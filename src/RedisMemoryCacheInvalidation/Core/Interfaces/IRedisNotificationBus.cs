@@ -1,7 +1,7 @@
-﻿using RedisMemoryCacheInvalidation.Core;
-using RedisMemoryCacheInvalidation.Redis;
-using System.Runtime.Caching;
+﻿using System.Runtime.Caching;
 using System.Threading.Tasks;
+using RedisMemoryCacheInvalidation.Core;
+using RedisMemoryCacheInvalidation.Redis;
 
 namespace RedisMemoryCacheInvalidation
 {
@@ -10,7 +10,7 @@ namespace RedisMemoryCacheInvalidation
         IRedisConnection Connection { get; }
         InvalidationStrategyType InvalidationStrategy { get; }
         MemoryCache LocalCache { get; }
-        INotificationManager<string> Notifier { get;  }
+        INotificationManager<string> Notifier { get; }
         Task<long> NotifyAsync(string key);
         void Start();
         void Stop();

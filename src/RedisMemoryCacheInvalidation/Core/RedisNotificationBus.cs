@@ -1,8 +1,8 @@
-﻿using RedisMemoryCacheInvalidation.Redis;
-using StackExchange.Redis;
-using System;
+﻿using System;
 using System.Runtime.Caching;
 using System.Threading.Tasks;
+using RedisMemoryCacheInvalidation.Redis;
+using StackExchange.Redis;
 
 namespace RedisMemoryCacheInvalidation.Core
 {
@@ -43,7 +43,7 @@ namespace RedisMemoryCacheInvalidation.Core
         {
             Connection.Connect();
             Connection.Subscribe(Constants.DEFAULT_INVALIDATION_CHANNEL, OnInvalidationMessage);
-            if (EnableKeySpaceNotifications)
+            if(EnableKeySpaceNotifications)
                 Connection.Subscribe(Constants.DEFAULT_KEYSPACE_CHANNEL, OnKeySpaceNotificationMessage);
         }
 
@@ -59,7 +59,7 @@ namespace RedisMemoryCacheInvalidation.Core
 
         private void OnInvalidationMessage(RedisChannel pattern, RedisValue data)
         {
-            if (pattern == Constants.DEFAULT_INVALIDATION_CHANNEL)
+            if(pattern == Constants.DEFAULT_INVALIDATION_CHANNEL)
             {
                 ProcessInvalidationMessage(data.ToString());
             }
@@ -68,7 +68,7 @@ namespace RedisMemoryCacheInvalidation.Core
         private void OnKeySpaceNotificationMessage(RedisChannel pattern, RedisValue data)
         {
             var prefix = pattern.ToString().Substring(0, 10);
-            switch (prefix)
+            switch(prefix)
             {
                 case "__keyevent":
                     ProcessInvalidationMessage(data.ToString());
@@ -81,15 +81,15 @@ namespace RedisMemoryCacheInvalidation.Core
 
         private void ProcessInvalidationMessage(string key)
         {
-            if ((InvalidationStrategy & InvalidationStrategyType.ChangeMonitor) == InvalidationStrategyType.ChangeMonitor)
+            if((InvalidationStrategy & InvalidationStrategyType.ChangeMonitor) == InvalidationStrategyType.ChangeMonitor)
                 Notifier.Notify(key);
 
-            if ((InvalidationStrategy & InvalidationStrategyType.AutoCacheRemoval) == InvalidationStrategyType.AutoCacheRemoval)
-                if (LocalCache != null)
+            if((InvalidationStrategy & InvalidationStrategyType.AutoCacheRemoval) == InvalidationStrategyType.AutoCacheRemoval)
+                if(LocalCache != null)
                     LocalCache.Remove(key);
 
-            if ((InvalidationStrategy & InvalidationStrategyType.External) == InvalidationStrategyType.External)
-                if (NotificationCallback != null)
+            if((InvalidationStrategy & InvalidationStrategyType.External) == InvalidationStrategyType.External)
+                if(NotificationCallback != null)
                     NotificationCallback?.Invoke(key);
 
         }

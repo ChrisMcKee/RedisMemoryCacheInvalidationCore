@@ -11,11 +11,11 @@ namespace RedisMemoryCacheInvalidation
         /// <summary>
         /// Use only change monitor to invalidate local items.
         /// </summary>
-        ChangeMonitor=1,
+        ChangeMonitor = 1,
         /// <summary>
         /// Auto remove items from default memory cache.
         /// </summary>
-        AutoCacheRemoval=2,
+        AutoCacheRemoval = 2,
         /// <summary>
         /// External. An event is emitted.
         /// </summary>

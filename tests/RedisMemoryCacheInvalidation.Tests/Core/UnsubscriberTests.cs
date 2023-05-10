@@ -1,9 +1,9 @@
-﻿using RedisMemoryCacheInvalidation.Core;
-using RedisMemoryCacheInvalidation.Core.Interfaces;
+﻿using System;
 using Moq;
+using RedisMemoryCacheInvalidation.Core;
+using RedisMemoryCacheInvalidation.Core.Interfaces;
 using RedisMemoryCacheInvalidation.Utils;
 using Xunit;
-using System;
 
 namespace RedisMemoryCacheInvalidation.Tests.Core
 {
@@ -33,7 +33,7 @@ namespace RedisMemoryCacheInvalidation.Tests.Core
             var mock2 = new Mock<INotificationObserver<string>>();
             var mock3 = new Mock<INotificationObserver<string>>();
 
-            var obs = new SynchronizedCollection<INotificationObserver<string>> {mock1.Object, mock2.Object, mock3.Object };
+            var obs = new SynchronizedCollection<INotificationObserver<string>> { mock1.Object, mock2.Object, mock3.Object };
             var unsub = new Unsubscriber(obs, mock2.Object);
             unsub.Dispose();
 

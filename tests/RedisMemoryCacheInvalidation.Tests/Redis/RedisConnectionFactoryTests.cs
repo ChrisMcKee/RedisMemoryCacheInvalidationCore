@@ -23,7 +23,7 @@ namespace RedisMemoryCacheInvalidation.Tests.Redis
             var mockOfMux = new Mock<IConnectionMultiplexer>();
             var cnx = RedisConnectionFactory.New(mockOfMux.Object);
 
-            Assert.IsType<ExistingRedisConnnection>(cnx);
+            Assert.IsType<ExistingRedisConnection>(cnx);
         }
     }
 }

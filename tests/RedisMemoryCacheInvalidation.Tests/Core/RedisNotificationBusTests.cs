@@ -36,11 +36,11 @@ namespace RedisMemoryCacheInvalidation.Tests.Core
             var lcache = new MemoryCache(Guid.NewGuid().ToString());
             var bus = new RedisNotificationBus("localhost:6379",
                 new InvalidationSettings
-                    {TargetCache = lcache, InvalidationStrategy = InvalidationStrategyType.ChangeMonitor});
+                { TargetCache = lcache, InvalidationStrategy = InvalidationStrategyType.ChangeMonitor });
             bus.Connection = MockOfConnection.Object;
             var monitor = new RedisChangeMonitor(bus.Notifier, "mykey");
             lcache.Add("mykey", DateTime.UtcNow,
-                new CacheItemPolicy {AbsoluteExpiration = DateTime.UtcNow.AddDays(1), ChangeMonitors = {monitor}});
+                new CacheItemPolicy { AbsoluteExpiration = DateTime.UtcNow.AddDays(1), ChangeMonitors = { monitor } });
 
             bus.Start();
 
@@ -61,11 +61,11 @@ namespace RedisMemoryCacheInvalidation.Tests.Core
             Action<string> cb = s => { called = true; };
             var bus = new RedisNotificationBus("localhost:6379",
                 new InvalidationSettings
-                    {InvalidationStrategy = InvalidationStrategyType.External, InvalidationCallback = cb});
+                { InvalidationStrategy = InvalidationStrategyType.External, InvalidationCallback = cb });
             bus.Connection = MockOfConnection.Object;
             var monitor = new RedisChangeMonitor(bus.Notifier, "mykey");
             lcache.Add("mykey", DateTime.UtcNow,
-                new CacheItemPolicy {AbsoluteExpiration = DateTime.UtcNow.AddDays(1), ChangeMonitors = {monitor}});
+                new CacheItemPolicy { AbsoluteExpiration = DateTime.UtcNow.AddDays(1), ChangeMonitors = { monitor } });
 
             bus.Start();
 
@@ -85,11 +85,11 @@ namespace RedisMemoryCacheInvalidation.Tests.Core
             var lcache = new MemoryCache(Guid.NewGuid().ToString());
             var bus = new RedisNotificationBus("localhost:6379",
                 new InvalidationSettings
-                    {TargetCache = lcache, InvalidationStrategy = InvalidationStrategyType.AutoCacheRemoval});
+                { TargetCache = lcache, InvalidationStrategy = InvalidationStrategyType.AutoCacheRemoval });
             bus.Connection = MockOfConnection.Object;
             var monitor = new RedisChangeMonitor(bus.Notifier, "mykey");
             lcache.Add("mykey", DateTime.UtcNow,
-                new CacheItemPolicy {AbsoluteExpiration = DateTime.UtcNow.AddDays(1), ChangeMonitors = {monitor}});
+                new CacheItemPolicy { AbsoluteExpiration = DateTime.UtcNow.AddDays(1), ChangeMonitors = { monitor } });
 
             bus.Start();
 

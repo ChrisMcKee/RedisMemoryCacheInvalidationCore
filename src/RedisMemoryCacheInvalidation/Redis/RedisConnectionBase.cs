@@ -1,8 +1,8 @@
-﻿using RedisMemoryCacheInvalidation.Utils;
-using StackExchange.Redis;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using RedisMemoryCacheInvalidation.Utils;
+using StackExchange.Redis;
 
 namespace RedisMemoryCacheInvalidation.Redis
 {
@@ -17,7 +17,7 @@ namespace RedisMemoryCacheInvalidation.Redis
 
         public void Subscribe(string channel, Action<RedisChannel, RedisValue> handler)
         {
-            if (IsConnected)
+            if(IsConnected)
             {
                 var subscriber = multiplexer.GetSubscriber();
                 subscriber.Subscribe(channel, handler);
@@ -26,13 +26,13 @@ namespace RedisMemoryCacheInvalidation.Redis
 
         public void UnsubscribeAll()
         {
-            if (IsConnected)
+            if(IsConnected)
                 multiplexer.GetSubscriber().UnsubscribeAll();
         }
 
         public Task<long> PublishAsync(string channel, string value)
         {
-            if (IsConnected)
+            if(IsConnected)
             {
                 return multiplexer.GetSubscriber().PublishAsync(channel, value);
             }
@@ -41,7 +41,7 @@ namespace RedisMemoryCacheInvalidation.Redis
         }
         public Task<KeyValuePair<string, string>[]> GetConfigAsync()
         {
-            if (IsConnected)
+            if(IsConnected)
             {
                 var server = GetServer();
                 return server.ConfigGetAsync();
@@ -54,14 +54,14 @@ namespace RedisMemoryCacheInvalidation.Redis
         {
             var endpoints = multiplexer.GetEndPoints();
             IServer result = null;
-            foreach (var endpoint in endpoints)
+            foreach(var endpoint in endpoints)
             {
                 var server = multiplexer.GetServer(endpoint);
-                if (server.IsReplica || !server.IsConnected) continue;
-                if (result != null) throw new InvalidOperationException("Requires exactly one master endpoint (found " + server.EndPoint + " and " + result.EndPoint + ")");
+                if(server.IsReplica || !server.IsConnected) continue;
+                if(result != null) throw new InvalidOperationException("Requires exactly one master endpoint (found " + server.EndPoint + " and " + result.EndPoint + ")");
                 result = server;
             }
-            if (result == null) throw new InvalidOperationException("Requires exactly one master endpoint (found none)");
+            if(result == null) throw new InvalidOperationException("Requires exactly one master endpoint (found none)");
             return result;
         }
 
