@@ -29,7 +29,7 @@ First, you have to configure the library, mainly to setup a persistent redis con
 ```
 Redis connection string follow [StackExchange.Redis Configuration model](https://github.com/StackExchange/StackExchange.Redis/blob/master/Docs/Configuration.md)
 
-Threre are at least 3 ways to send invalidation messages :
+There are at least 3 ways to send invalidation messages :
 - send an invalidation message via any redis client following the command `PUBLISH invalidate onemessagekey`
 - use `InvalidationManager.InvalidateAsync` (same as the previous one)
 - use keyspace notification (yes, RedisMemoryCacheInvalidation supports it)

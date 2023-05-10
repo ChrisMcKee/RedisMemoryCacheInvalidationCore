@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netstandard2.0;net472;net462</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net48</TargetFrameworks>
     <AssemblyTitle>RedisMemoryCacheInvalidation</AssemblyTitle>
     <Company>RedisMemoryCacheInvalidation - Core</Company>
     <Author>RedisMemoryCacheInvalidation - Core</Author>
@@ -23,8 +23,8 @@
   </PropertyGroup>
  
   <ItemGroup>
-    <PackageReference Include="StackExchange.Redis" Version="2.1.58" />
-    <PackageReference Include="System.Runtime.Caching" Version="4.7.0" />
+    <PackageReference Include="StackExchange.Redis" Version="[2.1.58,)" />
+    <PackageReference Include="System.Runtime.Caching" Version="[4.7,)" />
   </ItemGroup>
 
 </Project>

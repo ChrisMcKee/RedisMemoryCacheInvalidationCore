@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace RedisMemoryCacheInvalidation.Tests.Integration
 {
@@ -16,9 +17,9 @@ namespace RedisMemoryCacheInvalidation.Tests.Integration
             //test more disconnected scenarios
             InvalidationManager.Configure("blabblou", new InvalidationSettings());
             Assert.False(InvalidationManager.IsConnected);
-
-            var published = InvalidationManager.InvalidateAsync("mykey").Result;
-            Assert.Equal(0L, published);
+            Assert.ThrowsAsync<InvalidOperationException>(async () => {
+                var published = InvalidationManager.InvalidateAsync("mykey").Result;
+            });
         }
 
         [Fact]

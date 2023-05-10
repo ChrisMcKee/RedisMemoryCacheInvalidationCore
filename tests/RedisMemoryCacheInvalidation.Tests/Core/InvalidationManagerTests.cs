@@ -38,7 +38,7 @@ namespace RedisMemoryCacheInvalidation.Tests
         {
             Assert.Throws<InvalidOperationException>(() => { InvalidationManager.CreateChangeMonitor("rzer"); });
             Assert.Throws<InvalidOperationException>(() => { InvalidationManager.CreateChangeMonitor(new CacheItem("rzesdqr")); });
-            Assert.Throws<InvalidOperationException>(() => { InvalidationManager.InvalidateAsync("rzaaer"); });
+            Assert.ThrowsAsync<InvalidOperationException>(async () => await InvalidationManager.InvalidateAsync("rzaaer"));
             Assert.Throws<ArgumentNullException>(() => { InvalidationManager.CreateChangeMonitor((string)null); });
             Assert.Throws<ArgumentNullException>(() => { InvalidationManager.CreateChangeMonitor((CacheItem)null); });
         }
