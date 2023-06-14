@@ -24,7 +24,7 @@
     <ProjectReference Include="..\..\src\RedisMemoryCacheInvalidation\RedisMemoryCacheInvalidation.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="StackExchange.Redis" Version="2.6.111" />
+    <PackageReference Include="StackExchange.Redis" Version="2.6.116" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Runtime.Caching" />
