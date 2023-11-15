@@ -10,7 +10,7 @@
 	<PackageReference Include="GitHubActionsTestLogger" Version="2.1.0" PrivateAssets="all" />
     <PackageReference Include="Moq" Version="4.18.4" />
     <PackageReference Include="redis-inside" Version="3.3.0" />
-    <PackageReference Include="ReportGenerator" Version="5.1.23" />
+    <PackageReference Include="ReportGenerator" Version="5.2.0" />
     <PackageReference Include="System.Runtime.Caching" Version="[4.7,)" />
     <PackageReference Include="xunit" Version="[2.4,)" />
     <PackageReference Include="xunit.runner.visualstudio" Version="[2.4,)">
