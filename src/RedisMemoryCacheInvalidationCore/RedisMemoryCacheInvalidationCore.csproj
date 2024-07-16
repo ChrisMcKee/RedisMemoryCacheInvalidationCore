@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netstandard2.0;net48</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net8.0;net48</TargetFrameworks>
     <AssemblyTitle>RedisMemoryCacheInvalidation</AssemblyTitle>
     <Company>RedisMemoryCacheInvalidation - Core</Company>
     <Author>RedisMemoryCacheInvalidation - Core</Author>
     <Product>RedisMemoryCacheInvalidation</Product>
-    <Copyright>2014-2020 Chris McKee, Lemaitre/Cybermaxs</Copyright>
+    <Copyright>2014-2024 Chris McKee, Lemaitre/Cybermaxs</Copyright>
     <OutputTypeEx>Library</OutputTypeEx>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IncludeSource>false</IncludeSource>
@@ -24,14 +24,16 @@
     <PackageProjectUrl>https://github.com/ChrisMcKee/RedisMemoryCacheInvalidationCore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ChrisMcKee/RedisMemoryCacheInvalidationCore</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-<!--    <PackageLicenseFile>LICENSE</PackageLicenseFile>-->
+
+    <Version>2.0.3</Version>
+
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    
-    <Version>2.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="..\..\LICENSE" />
+    <None Include="..\..\readme.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <PropertyGroup>
@@ -46,8 +48,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="StackExchange.Redis" Version="[2.1.58,)" />
-    <PackageReference Include="System.Runtime.Caching" Version="[4.7,)" />
+    <PackageReference Include="StackExchange.Redis" Version="2.8.0" />
+    <PackageReference Include="System.Runtime.Caching" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

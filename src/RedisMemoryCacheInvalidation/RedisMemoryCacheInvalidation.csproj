@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netstandard2.0;net48</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net8.0;net48</TargetFrameworks>
     <AssemblyTitle>RedisMemoryCacheInvalidation</AssemblyTitle>
     <Company>RedisMemoryCacheInvalidation - Core</Company>
     <Author>RedisMemoryCacheInvalidation - Core</Author>
     <Product>RedisMemoryCacheInvalidation</Product>
-    <Copyright>2014-2020 Chris McKee, Lemaitre/Cybermaxs</Copyright>
+    <Copyright>2014-2024 Chris McKee, Lemaitre/Cybermaxs</Copyright>
     <OutputTypeEx>Library</OutputTypeEx>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IncludeSource>true</IncludeSource>
@@ -15,7 +15,7 @@
     <Summary>A redis-powered local memory cache invalidation mechanism.</Summary>
     <Description>This package allow to invalidate local memory cache items with the help of StackExchange.Redis</Description>
 
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -23,8 +23,8 @@
   </PropertyGroup>
  
   <ItemGroup>
-    <PackageReference Include="StackExchange.Redis" Version="[2.1.58,)" />
-    <PackageReference Include="System.Runtime.Caching" Version="[4.7,)" />
+    <PackageReference Include="StackExchange.Redis" Version="2.8.0" />
+    <PackageReference Include="System.Runtime.Caching" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

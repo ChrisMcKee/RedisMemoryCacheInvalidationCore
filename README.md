@@ -22,7 +22,7 @@ How to use it ?
 __quick start__
 
 
-First, you have to configure the library, mainly to setup a persistent redis connection and various stuff
+First, you have to configure the library, mainly to set up a persistent redis connection and various stuff
 ```csharp
   // somewhere in your global.asax/startup.cs
   InvalidationManager.Configure("localhost:6379", new InvalidationSettings());
@@ -35,7 +35,7 @@ There are at least 3 ways to send invalidation messages :
 - use keyspace notification (yes, RedisMemoryCacheInvalidation supports it)
 
 Once an invalidation message is intercepted by the library, you can invalidate one or more items at the same time by using `InvalidationSettings.InvalidationStrategy`
-- `InvalidationStrategyType.ChangeMonitor` => a custom custom change monitor `InvalidationManager.CreateChangeMonitor`
+- `InvalidationStrategyType.ChangeMonitor` => a custom change monitor `InvalidationManager.CreateChangeMonitor`
 - `InvalidationStrategyType.AutoCacheRemoval` => use the automatic MemoryCache removal configured at `InvalidationSettings.ConfigureAsync`
 - `InvalidationStrategyType.External` => use the callback configured at `InvalidationSettings.InvalidationCallback`
 

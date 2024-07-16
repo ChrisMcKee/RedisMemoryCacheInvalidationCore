@@ -1,25 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
     <AssemblyTitle>RedisMemoryCacheInvalidation.Test</AssemblyTitle>
     <Product>RedisMemoryCacheInvalidation.Test</Product>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AutoFixture" Version="4.13.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="[17.5,)" />
-	<PackageReference Include="GitHubActionsTestLogger" Version="2.3.3" PrivateAssets="all" />
-    <PackageReference Include="Moq" Version="4.18.4" />
-    <PackageReference Include="redis-inside" Version="3.3.0" />
-    <PackageReference Include="ReportGenerator" Version="5.1.23" />
-    <PackageReference Include="System.Runtime.Caching" Version="[4.7,)" />
-    <PackageReference Include="xunit" Version="[2.4,)" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="[2.4,)">
+    <PackageReference Include="AutoFixture" Version="4.18.1"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0"/>
+    <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1" PrivateAssets="all"/>
+    <PackageReference Include="Moq" Version="4.20.70"/>
+    <PackageReference Include="redis-inside" Version="3.3.0"/>
+    <PackageReference Include="ReportGenerator" Version="5.3.8"/>
+    <PackageReference Include="System.Runtime.Caching" Version="8.0.0"/>
+    <PackageReference Include="xunit" Version="2.9.0"/>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-	<PackageReference Include="coverlet.collector" Version="[3.2,)" PrivateAssets="all" />
+    <PackageReference Include="coverlet.collector" Version="6.0.2" PrivateAssets="all"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\RedisMemoryCacheInvalidation\RedisMemoryCacheInvalidation.csproj" />
+    <ProjectReference Include="..\..\src\RedisMemoryCacheInvalidation\RedisMemoryCacheInvalidation.csproj"/>
   </ItemGroup>
 </Project>

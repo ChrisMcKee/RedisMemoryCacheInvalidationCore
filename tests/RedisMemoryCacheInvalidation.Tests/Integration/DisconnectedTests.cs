@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace RedisMemoryCacheInvalidation.Tests.Integration
@@ -12,25 +13,25 @@ namespace RedisMemoryCacheInvalidation.Tests.Integration
 
         [Fact]
         [Trait(TestConstants.TestCategory, TestConstants.IntegrationTestCategory)]
-        public void InvalidHost_ShouldNotBeConnected()
+        public async Task InvalidHost_ShouldNotBeConnected()
         {
             //test more disconnected scenarios
             InvalidationManager.Configure("blabblou", new InvalidationSettings());
             Assert.False(InvalidationManager.IsConnected);
-            Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
-                var published = InvalidationManager.InvalidateAsync("mykey").Result;
+                await InvalidationManager.InvalidateAsync("mykey");
             });
         }
 
         [Fact]
         [Trait(TestConstants.TestCategory, TestConstants.IntegrationTestCategory)]
-        public void WhenNotConnected_ShouldNotPublishMessages()
+        public async Task WhenNotConnected_ShouldNotPublishMessages()
         {
             //test more disconnected scenarios
             InvalidationManager.Configure("blabblou", new InvalidationSettings());
 
-            var published = InvalidationManager.InvalidateAsync("mykey").Result;
+            var published = await InvalidationManager.InvalidateAsync("mykey");
             Assert.Equal(0L, published);
         }
     }

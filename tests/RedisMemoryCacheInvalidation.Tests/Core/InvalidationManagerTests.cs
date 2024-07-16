@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Caching;
+using System.Threading.Tasks;
 using Moq;
 using Xunit;
 
@@ -34,11 +35,11 @@ namespace RedisMemoryCacheInvalidation.Tests
 
         [Fact]
         [Trait(TestConstants.TestCategory, TestConstants.UnitTestCategory)]
-        public void CreateChangeMonitorBadArgs_ShouldThrowException()
+        public async Task CreateChangeMonitorBadArgs_ShouldThrowException()
         {
             Assert.Throws<InvalidOperationException>(() => { InvalidationManager.CreateChangeMonitor("rzer"); });
             Assert.Throws<InvalidOperationException>(() => { InvalidationManager.CreateChangeMonitor(new CacheItem("rzesdqr")); });
-            Assert.ThrowsAsync<InvalidOperationException>(async () => await InvalidationManager.InvalidateAsync("rzaaer"));
+            await Assert.ThrowsAsync<InvalidOperationException>(async () => await InvalidationManager.InvalidateAsync("rzaaer"));
             Assert.Throws<ArgumentNullException>(() => { InvalidationManager.CreateChangeMonitor((string)null); });
             Assert.Throws<ArgumentNullException>(() => { InvalidationManager.CreateChangeMonitor((CacheItem)null); });
         }
