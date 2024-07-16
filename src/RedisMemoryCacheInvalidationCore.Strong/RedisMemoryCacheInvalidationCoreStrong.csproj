@@ -22,17 +22,19 @@
     <RepositoryUrl>https://github.com/ChrisMcKee/RedisMemoryCacheInvalidationCore</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
-    <Version>2.0.3</Version>
+    <Version>2.4.0</Version>
 
     <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <PackageIconUrl>iconpkg.png</PackageIconUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\iconpkg.png" />
     <None Include="..\..\LICENSE" />
     <None Include="..\..\readme.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
-
+  
   <PropertyGroup>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <Deterministic>false</Deterministic>
