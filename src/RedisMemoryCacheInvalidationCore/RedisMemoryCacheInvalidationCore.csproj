@@ -9,7 +9,7 @@
     <OutputTypeEx>Library</OutputTypeEx>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IncludeSource>false</IncludeSource>
-    
+
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <NoWarn>CS1591;CS1734</NoWarn>
 
@@ -19,7 +19,7 @@
     <Title>RedisMemoryCacheInvalidationCore</Title>
     <Summary>A redis-powered local memory cache invalidation mechanism.</Summary>
     <Description>This package allow to invalidate local memory cache items with the help of StackExchange.Redis</Description>
-    
+
     <PackageTags>redis,cache,invalidation</PackageTags>
     <PackageProjectUrl>https://github.com/ChrisMcKee/RedisMemoryCacheInvalidationCore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ChrisMcKee/RedisMemoryCacheInvalidationCore</RepositoryUrl>
@@ -33,8 +33,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\iconpkg.png" />
-    <None Include="..\..\LICENSE" />
+    <None Include="..\..\iconpkg.png" Pack="true" PackagePath="\"/>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\"/>
     <None Include="..\..\readme.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Remove="..\RedisMemoryCacheInvalidation\Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="StackExchange.Redis" Version="2.8.0" />
     <PackageReference Include="System.Runtime.Caching" Version="8.0.0" />
