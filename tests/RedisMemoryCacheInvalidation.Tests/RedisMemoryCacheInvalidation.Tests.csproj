@@ -8,7 +8,7 @@
     <PackageReference Include="AutoFixture" Version="4.18.1"/>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0"/>
     <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1" PrivateAssets="all"/>
-    <PackageReference Include="Moq" Version="4.20.70"/>
+    <PackageReference Include="Moq" Version="4.20.71"/>
     <PackageReference Include="redis-inside" Version="3.3.0"/>
     <PackageReference Include="ReportGenerator" Version="5.3.8"/>
     <PackageReference Include="System.Runtime.Caching" Version="8.0.0"/>
