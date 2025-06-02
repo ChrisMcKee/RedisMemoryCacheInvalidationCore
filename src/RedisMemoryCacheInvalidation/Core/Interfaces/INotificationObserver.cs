@@ -1,5 +1,4 @@
-﻿
-namespace RedisMemoryCacheInvalidation.Core.Interfaces
+﻿namespace RedisMemoryCacheInvalidation.Core.Interfaces
 {
     /// <summary>
     /// Provides a mechanism for receiving push-based notifications.

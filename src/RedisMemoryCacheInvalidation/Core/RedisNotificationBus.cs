@@ -73,25 +73,26 @@ namespace RedisMemoryCacheInvalidation.Core
                 case "__keyevent":
                     ProcessInvalidationMessage(data.ToString());
                     break;
-                default:
-                    //nop
-                    break;
             }
         }
 
         private void ProcessInvalidationMessage(string key)
         {
-            if((InvalidationStrategy & InvalidationStrategyType.ChangeMonitor) == InvalidationStrategyType.ChangeMonitor)
+            if((InvalidationStrategy & InvalidationStrategyType.ChangeMonitor) ==
+               InvalidationStrategyType.ChangeMonitor)
+            {
                 Notifier.Notify(key);
+            }
 
             if((InvalidationStrategy & InvalidationStrategyType.AutoCacheRemoval) == InvalidationStrategyType.AutoCacheRemoval)
-                if(LocalCache != null)
-                    LocalCache.Remove(key);
+            {
+                LocalCache?.Remove(key);
+            }
 
             if((InvalidationStrategy & InvalidationStrategyType.External) == InvalidationStrategyType.External)
-                if(NotificationCallback != null)
-                    NotificationCallback?.Invoke(key);
-
+            {
+                NotificationCallback?.Invoke(key);
+            }
         }
     }
 }
