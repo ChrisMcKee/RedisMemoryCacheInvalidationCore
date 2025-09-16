@@ -6,7 +6,7 @@ namespace RedisMemoryCacheInvalidation.Utils
     internal static class Guard
     {
         /// <summary>
-        /// Ensures the value of the given <paramref name="argumentExpression"/> is not null.
+        /// Ensures the value of the given <paramref name="parameterName"/> is not null.
         /// Throws <see cref="ArgumentNullException"/> otherwise.
         /// </summary>
         /// <param name="parameter">instance to test for null</param>
@@ -18,7 +18,7 @@ namespace RedisMemoryCacheInvalidation.Utils
         }
 
         /// <summary>
-        /// Ensures the value of the given <paramref name="argumentExpression"/> is not null.
+        /// Ensures the value of the given <paramref name="parameterName"/> is not null.
         /// Throws <see cref="ArgumentNullException"/> otherwise.
         /// </summary>
         /// <param name="parameter">instance to test for (Generic) Default value</param>
@@ -30,7 +30,7 @@ namespace RedisMemoryCacheInvalidation.Utils
         }
 
         /// <summary>
-        /// Ensures the string value of the given <paramref name="argumentExpression"/> is not null or empty.
+        /// Ensures the string value of the given <paramref name="parameterName"/> is not null or empty.
         /// Throws <see cref="ArgumentNullException"/> in the first case, or
         /// <see cref="ArgumentException"/> in the latter.
         /// </summary>

@@ -2,7 +2,6 @@
 using AutoFixture;
 using Moq;
 using RedisMemoryCacheInvalidation.Core;
-using RedisMemoryCacheInvalidation.Core.Interfaces;
 using Xunit;
 
 namespace RedisMemoryCacheInvalidation.Tests.Core;

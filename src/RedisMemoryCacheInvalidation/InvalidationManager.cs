@@ -23,18 +23,20 @@ namespace RedisMemoryCacheInvalidation
 
         /// <summary>
         /// Use to Configure Redis MemoryCache Invalidation.
-        /// A new redis connection will be establish based upon parameter redisConfig.
+        /// A new redis connection will be established based upon parameter redisConfig.
         /// </summary>
         /// <param name="redisConfig">StackExchange configuration settings.</param>
         /// <param name="settings">InvalidationManager settings.(</param>
         /// <returns>Task when connection is opened and subscribed to pubsub events.</returns>
         public static void Configure(string redisConfig, InvalidationSettings settings)
         {
-            if(NotificationBus == null)
+            if(NotificationBus != null)
             {
-                NotificationBus = new RedisNotificationBus(redisConfig, settings);
-                NotificationBus.Start();
+                return;
             }
+
+            NotificationBus = new RedisNotificationBus(redisConfig, settings);
+            NotificationBus.Start();
         }
 
         /// <summary>
@@ -55,7 +57,7 @@ namespace RedisMemoryCacheInvalidation
         /// <summary>
         /// Allow to create a custom ChangeMonitor depending on the pubsub event (channel : invalidate, data:invalidationKey)
         /// </summary>
-        /// <param name="invalidationKey">invalidation key send by redis PUBLISH invalidate invalidatekey</param>
+        /// <param name="invalidationKey">invalidation key sent by redis PUBLISH invalidate</param>
         /// <returns>RedisChangeMonitor watching for notifications</returns>
         public static RedisChangeMonitor CreateChangeMonitor(string invalidationKey)
         {

@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Runtime.Caching;
 using RedisMemoryCacheInvalidation.Core;
-using RedisMemoryCacheInvalidation.Core.Interfaces;
 using RedisMemoryCacheInvalidation.Utils;
 
 namespace RedisMemoryCacheInvalidation.Monitor
@@ -51,8 +50,15 @@ namespace RedisMemoryCacheInvalidation.Monitor
             Unsubscribe();
         }
 
+        /// <summary>
+        /// Gets the unique identifier for this change monitor.
+        /// </summary>
         public override string UniqueId { get; }
 
+        /// <summary>
+        /// Called when a notification is received from the notification manager.
+        /// </summary>
+        /// <param name="value">The notification value (cache key).</param>
         public void Notify(string value)
         {
             if(value == _key)

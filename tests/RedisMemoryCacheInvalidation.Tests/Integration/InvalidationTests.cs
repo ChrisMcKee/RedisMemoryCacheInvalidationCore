@@ -68,7 +68,7 @@ public class InvalidationTests : IClassFixture<RedisServerFixture>
 
         //act
         var subscriber = _redis.GetSubscriber();
-        subscriber.Publish(RedisChannel.Literal(Constants.DEFAULT_INVALIDATION_CHANNEL), Encoding.Default.GetBytes(invalidationKey));
+        subscriber.Publish(RedisChannel.Literal(Constants.DefaultInvalidationChannel), Encoding.Default.GetBytes(invalidationKey));
 
         // hack wait for notification
         Thread.Sleep(50);
@@ -124,7 +124,7 @@ public class InvalidationTests : IClassFixture<RedisServerFixture>
 
         // act - Use direct Redis publish to test change monitor functionality
         var subscriber = _redis.GetSubscriber();
-        subscriber.Publish(RedisChannel.Literal(Constants.DEFAULT_INVALIDATION_CHANNEL), invalidationKey);
+        subscriber.Publish(RedisChannel.Literal(Constants.DefaultInvalidationChannel), invalidationKey);
 
         // Wait for notification to be processed
         Thread.Sleep(100);
@@ -156,11 +156,11 @@ public class InvalidationTests : IClassFixture<RedisServerFixture>
 
         // act - Test invalidation by directly invalidating via pub/sub in servicestack redis
         var db = _redis.GetDatabase(0);
-        await db.Multiplexer.GetSubscriber().SubscribeAsync(RedisChannel.Literal(Constants.DEFAULT_INVALIDATION_CHANNEL), (channel, message) =>
+        await db.Multiplexer.GetSubscriber().SubscribeAsync(RedisChannel.Literal(Constants.DefaultInvalidationChannel), (channel, message) =>
         {
             Output.WriteLine($"Received message on channel {channel}: {message}");
         });
-        await db.PublishAsync(RedisChannel.Literal(Constants.DEFAULT_INVALIDATION_CHANNEL), invalidationKey);
+        await db.PublishAsync(RedisChannel.Literal(Constants.DefaultInvalidationChannel), invalidationKey);
 
         // Wait for invalidation to be processed
         Thread.Sleep(100);

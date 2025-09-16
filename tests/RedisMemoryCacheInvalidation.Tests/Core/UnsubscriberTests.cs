@@ -1,7 +1,6 @@
 ﻿using System;
 using Moq;
 using RedisMemoryCacheInvalidation.Core;
-using RedisMemoryCacheInvalidation.Core.Interfaces;
 using RedisMemoryCacheInvalidation.Utils;
 using Xunit;
 

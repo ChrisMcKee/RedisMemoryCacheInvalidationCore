@@ -46,7 +46,7 @@ public class RedisNotificationBusTests
         bus.Start();
 
         //act
-        NotificationEmitter(RedisChannel.Literal(Constants.DEFAULT_INVALIDATION_CHANNEL), "mykey");
+        NotificationEmitter(RedisChannel.Literal(Constants.DefaultInvalidationChannel), "mykey");
 
         //assert
         Assert.False(lcache.Contains("mykey"));
@@ -71,7 +71,7 @@ public class RedisNotificationBusTests
         bus.Start();
 
         //act
-        NotificationEmitter(RedisChannel.Literal(Constants.DEFAULT_INVALIDATION_CHANNEL), "mykey");
+        NotificationEmitter(RedisChannel.Literal(Constants.DefaultInvalidationChannel), "mykey");
 
         //assert
         Assert.True(lcache.Contains("mykey"));
@@ -95,7 +95,7 @@ public class RedisNotificationBusTests
         bus.Start();
 
         //act
-        NotificationEmitter(RedisChannel.Literal(Constants.DEFAULT_INVALIDATION_CHANNEL), "mykey");
+        NotificationEmitter(RedisChannel.Literal(Constants.DefaultInvalidationChannel), "mykey");
 
         //assert
         Assert.False(lcache.Contains("mykey"));
@@ -123,7 +123,7 @@ public class RedisNotificationBusTests
         var notifyTask = await bus.NotifyAsync("mykey");
 
         Assert.Equal(5, notifyTask);
-        MockOfConnection.Verify(c => c.PublishAsync(Constants.DEFAULT_INVALIDATION_CHANNEL, "mykey"), Times.Once);
+        MockOfConnection.Verify(c => c.PublishAsync(Constants.DefaultInvalidationChannel, "mykey"), Times.Once);
     }
 
     [Fact]
@@ -137,7 +137,7 @@ public class RedisNotificationBusTests
 
         MockOfConnection.Verify(c => c.Connect(), Times.Once);
         MockOfConnection.Verify(
-            c => c.Subscribe(Constants.DEFAULT_INVALIDATION_CHANNEL, It.IsAny<Action<RedisChannel, RedisValue>>()),
+            c => c.Subscribe(Constants.DefaultInvalidationChannel, It.IsAny<Action<RedisChannel, RedisValue>>()),
             Times.Once);
     }
 
@@ -152,6 +152,6 @@ public class RedisNotificationBusTests
         var notifyTask = await bus.NotifyAsync("mykey");
 
         Assert.Equal(5, notifyTask);
-        MockOfConnection.Verify(c => c.PublishAsync(Constants.DEFAULT_INVALIDATION_CHANNEL, "mykey"), Times.Once);
+        MockOfConnection.Verify(c => c.PublishAsync(Constants.DefaultInvalidationChannel, "mykey"), Times.Once);
     }
 }

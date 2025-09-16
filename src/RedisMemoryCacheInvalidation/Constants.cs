@@ -1,8 +1,18 @@
 ﻿namespace RedisMemoryCacheInvalidation
 {
-    public static class Constants
+    /// <summary>
+    /// Contains constant values used throughout the Redis memory cache invalidation library.
+    /// </summary>
+    internal static class Constants
     {
-        public const string DEFAULT_INVALIDATION_CHANNEL = "invalidate";
-        public const string DEFAULT_KEYSPACE_CHANNEL = "__keyevent*__:*";
+        /// <summary>
+        /// The default Redis channel used for invalidation messages.
+        /// </summary>
+        public const string DefaultInvalidationChannel = "invalidate";
+
+        /// <summary>
+        /// The default Redis channel pattern used for keyspace notifications.
+        /// </summary>
+        public const string DefaultKeyspaceChannel = "__keyevent*__:*";
     }
 }
