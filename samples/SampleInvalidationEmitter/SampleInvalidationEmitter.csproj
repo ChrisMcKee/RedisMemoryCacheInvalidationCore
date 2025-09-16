@@ -12,6 +12,6 @@
     <ProjectReference Include="..\..\src\RedisMemoryCacheInvalidation\RedisMemoryCacheInvalidation.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Runtime.Caching" />
+    <PackageReference Include="System.Runtime.Caching" />
   </ItemGroup>
 </Project>
