@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using RedisMemoryCacheInvalidation.Utils;
 using StackExchange.Redis;
 
@@ -8,7 +9,13 @@ namespace RedisMemoryCacheInvalidation.Redis
 {
     internal abstract class RedisConnectionBase : IRedisConnection
     {
+        private readonly ILogger _logger;
         protected IConnectionMultiplexer Multiplexer;
+
+        protected RedisConnectionBase(ILogger logger)
+        {
+            _logger = logger;
+        }
 
         /// <summary>
         /// Gets a value indicating whether the connection is currently connected to Redis.
@@ -25,10 +32,20 @@ namespace RedisMemoryCacheInvalidation.Redis
         /// <param name="handler">The action to invoke when a message is received on the channel.</param>
         public void Subscribe(string channel, Action<RedisChannel, RedisValue> handler)
         {
-            if(IsConnected)
+            if(!IsConnected)
+            {
+                SafeLogger.LogTrace(_logger, "Subscribe skipped - not connected");
+                return;
+            }
+
+            try
             {
                 var subscriber = Multiplexer.GetSubscriber();
                 subscriber.Subscribe(RedisChannel.Literal(channel), handler);
+            }
+            catch(Exception ex)
+            {
+                SafeLogger.LogTrace(_logger, ex, "Subscribe threw an exception");
             }
         }
 
@@ -39,10 +56,18 @@ namespace RedisMemoryCacheInvalidation.Redis
         {
             if(!IsConnected)
             {
+                SafeLogger.LogTrace(_logger, "UnsubscribeAll skipped - not connected");
                 return;
             }
 
-            Multiplexer.GetSubscriber().UnsubscribeAll();
+            try
+            {
+                Multiplexer.GetSubscriber().UnsubscribeAll();
+            }
+            catch(Exception ex)
+            {
+                SafeLogger.LogTrace(_logger, ex, "UnsubscribeAll threw an exception");
+            }
         }
 
         /// <summary>
@@ -55,6 +80,7 @@ namespace RedisMemoryCacheInvalidation.Redis
         {
             if(!IsConnected)
             {
+                SafeLogger.LogTrace(_logger, "PublishAsync skipped - not connected");
                 return TaskCache.FromResult(0L);
             }
 
@@ -69,11 +95,20 @@ namespace RedisMemoryCacheInvalidation.Redis
         {
             if(!IsConnected)
             {
+                SafeLogger.LogTrace(_logger, "GetConfigAsync skipped - not connected");
                 return TaskCache.FromResult(new KeyValuePair<string, string>[] { });
             }
 
-            var server = GetServer();
-            return server.ConfigGetAsync();
+            try
+            {
+                var server = GetServer();
+                return server.ConfigGetAsync();
+            }
+            catch(Exception ex)
+            {
+                SafeLogger.LogTrace(_logger, ex, "GetConfigAsync threw an exception");
+                return TaskCache.FromResult(new KeyValuePair<string, string>[] { });
+            }
         }
 
         /// <summary>
@@ -91,6 +126,8 @@ namespace RedisMemoryCacheInvalidation.Redis
                 if(server.IsReplica || !server.IsConnected) continue;
                 if(result != null)
                 {
+                    SafeLogger.LogDebug(_logger, "Requires exactly one master endpoint (found {ServerEndpoint} and {ResultEndpoint})", server.EndPoint, result?.EndPoint);
+
                     throw new InvalidOperationException("Requires exactly one master endpoint (found " + server.EndPoint + " and " + result?.EndPoint + ")");
                 }
                 result = server;
@@ -98,6 +135,8 @@ namespace RedisMemoryCacheInvalidation.Redis
 
             if(result == null)
             {
+                SafeLogger.LogDebug(_logger, "Requires exactly one master endpoint (found none)");
+
                 throw new InvalidOperationException("Requires exactly one master endpoint (found none)");
             }
             return result;

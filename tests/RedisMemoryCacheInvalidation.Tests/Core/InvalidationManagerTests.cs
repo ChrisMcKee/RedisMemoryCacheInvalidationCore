@@ -2,6 +2,7 @@
 using System.Runtime.Caching;
 using System.Threading.Tasks;
 using Moq;
+using RedisMemoryCacheInvalidation.Core;
 using Xunit;
 
 namespace RedisMemoryCacheInvalidation.Tests;
@@ -39,7 +40,7 @@ public class InvalidationManagerTests
     {
         // Ensure InvalidationManager is not configured for this test
         InvalidationManager.NotificationBus = null;
-        
+
         Assert.Throws<InvalidOperationException>(() => { InvalidationManager.CreateChangeMonitor("rzer"); });
         Assert.Throws<InvalidOperationException>(() => { InvalidationManager.CreateChangeMonitor(new CacheItem("rzesdqr")); });
         await Assert.ThrowsAsync<InvalidOperationException>(async () => await InvalidationManager.InvalidateAsync("rzaaer"));

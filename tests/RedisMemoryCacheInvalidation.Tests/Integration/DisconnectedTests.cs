@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Xunit;
 
 namespace RedisMemoryCacheInvalidation.Tests.Integration;
@@ -18,7 +17,7 @@ public class DisconnectedTests
         //test more disconnected scenarios
         InvalidationManager.Configure("blabblou", new InvalidationSettings());
         Assert.False(InvalidationManager.IsConnected);
-        
+
         // When not connected, InvalidateAsync should return 0 (no subscribers) instead of throwing
         var result = await InvalidationManager.InvalidateAsync("mykey");
         Assert.Equal(0L, result);

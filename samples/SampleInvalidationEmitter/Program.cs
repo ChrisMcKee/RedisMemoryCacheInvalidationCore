@@ -5,8 +5,6 @@ using RedisMemoryCacheInvalidation;
 
 Console.WriteLine("Simple Invalidation Emitter");
 
-// InvalidationManager.Configure("localhost:6379", new InvalidationSettings());
-
 InvalidationManager.Configure("localhost:6379",
     new InvalidationSettings
     {
@@ -15,7 +13,8 @@ InvalidationManager.Configure("localhost:6379",
         {
             Console.WriteLine("RedisCacheInvalidation : Invalidating {0}, Count: {1}", s, MemoryCache.Default.GetCount());
         },
-        TargetCache = MemoryCache.Default
+        TargetCache = MemoryCache.Default,
+        EnableResilience = true
     }
 );
 
@@ -28,13 +27,14 @@ for(var i = 0; i < 3; i++)
     MemoryCache.Default.Set(id, "test", new CacheItemPolicy());
 }
 
-Console.WriteLine("Memory Count before invalidation: " + MemoryCache.Default.GetCount());
-Console.WriteLine("enter a key to send invalidation (default is 'mynotifmessage'): ");
-var key = Console.ReadLine();
-var task = await InvalidationManager.InvalidateAsync(string.IsNullOrEmpty(key) ? "mynotifmessage" : key);
-Console.WriteLine("message send to {0} clients", task);
 while(true)
 {
+    Console.WriteLine("Memory Count before invalidation: " + MemoryCache.Default.GetCount());
+    Console.WriteLine("enter a key to send invalidation (default is 'mynotifmessage'): ");
+    var key = Console.ReadLine();
+    var task = await InvalidationManager.InvalidateAsync(string.IsNullOrEmpty(key) ? "mynotifmessage" : key);
+    Console.WriteLine("message send to {0} clients", task);
+
     await Task.Delay(TimeSpan.FromSeconds(5));
     Console.WriteLine("Memory Count after invalidation: " + MemoryCache.Default.GetCount());
 }

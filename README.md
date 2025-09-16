@@ -177,6 +177,20 @@ Suppose you're using another caching implementation there is another way to be n
 Each time a notification message is intercepted, the callback defined in `InvalidationSettings.InvalidationCallback` is invoked.
 It's up to you to remove/flush/reload the cache item.
 
+- Enabling resilience (retrys)
+
+```csharp
+var settings = new InvalidationSettings
+{
+    EnableResilience = true,
+    HealthCheckIntervalMs = 15000, // 15 seconds
+    MaxRetryAttempts = 5,
+    RetryDelayMs = 500
+};
+
+InvalidationManager.Configure("localhost:6379", settings);
+```
+
 License
 ---
 Licensed under the terms of the [MIT License](http://opensource.org/licenses/MIT)

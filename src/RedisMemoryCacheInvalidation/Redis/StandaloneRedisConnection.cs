@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
+using RedisMemoryCacheInvalidation.Utils;
 using StackExchange.Redis;
 
 namespace RedisMemoryCacheInvalidation.Redis
@@ -9,14 +11,18 @@ namespace RedisMemoryCacheInvalidation.Redis
     /// </summary>
     internal class StandaloneRedisConnection : RedisConnectionBase
     {
+        private readonly ILogger _logger;
         private readonly ConfigurationOptions _options;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StandaloneRedisConnection"/> class.
         /// </summary>
         /// <param name="configurationOptions">The Redis configuration string.</param>
-        public StandaloneRedisConnection(string configurationOptions)
+        /// <param name="logger"></param>
+        public StandaloneRedisConnection(string configurationOptions, ILogger logger = null)
+            : base(logger)
         {
+            _logger = logger;
             _options = ConfigurationOptions.Parse(configurationOptions);
         }
 
@@ -26,19 +32,28 @@ namespace RedisMemoryCacheInvalidation.Redis
         /// <returns>true if the connection was established successfully; otherwise, false.</returns>
         public override bool Connect()
         {
-            if(Multiplexer == null)
+            try
             {
-                //overrides here
-                _options.ConnectTimeout = 5000;
-                _options.ConnectRetry = 3;
-                _options.KeepAlive = 90;
-                _options.AbortOnConnectFail = false;
-                _options.ClientName = "InvalidationClient_" + Environment.MachineName + "_" + Assembly.GetCallingAssembly().GetName().Version;
+                if(Multiplexer == null)
+                {
+                    //overrides here
+                    _options.ConnectTimeout = 5000;
+                    _options.ConnectRetry = 3;
+                    _options.KeepAlive = 90;
+                    _options.AbortOnConnectFail = false;
+                    _options.ClientName = "InvalidationClient_" + Environment.MachineName + "_" + Assembly.GetCallingAssembly().GetName().Version;
 
-                Multiplexer = ConnectionMultiplexer.Connect(_options);
+                    Multiplexer = ConnectionMultiplexer.Connect(_options);
+                }
+
+                return Multiplexer.IsConnected;
             }
-
-            return Multiplexer.IsConnected;
+            catch(Exception ex)
+            {
+                // Connection failed - return false to indicate failure
+                SafeLogger.LogWarning(_logger, ex, "Failed to connect to Redis: {Message}", ex.Message);
+                return false;
+            }
         }
 
         /// <summary>
@@ -47,7 +62,7 @@ namespace RedisMemoryCacheInvalidation.Redis
         public override void Disconnect()
         {
             UnsubscribeAll();
-            Multiplexer.Close(false);
+            Multiplexer?.Close(false);
         }
     }
 }

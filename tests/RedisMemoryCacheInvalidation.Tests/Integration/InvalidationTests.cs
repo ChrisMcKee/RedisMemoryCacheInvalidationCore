@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Linq;
 using System.Runtime.Caching;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using RedisMemoryCacheInvalidation.Monitor;
-using RedisMemoryCacheInvalidation.Tests;
 using RedisMemoryCacheInvalidation.Tests.Fixtures;
 using StackExchange.Redis;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace RedisMemoryCacheInvalidation.Integration.Tests;
+namespace RedisMemoryCacheInvalidation.Tests.Integration;
 
 [Collection("RedisServer")]
 public class InvalidationTests : IClassFixture<RedisServerFixture>
@@ -25,7 +23,6 @@ public class InvalidationTests : IClassFixture<RedisServerFixture>
 
     public InvalidationTests(RedisServerFixture redisServer, ITestOutputHelper outputHelper)
     {
-
         Output = outputHelper;
 
         _localCache = new MemoryCache(Guid.NewGuid().ToString());
@@ -66,14 +63,12 @@ public class InvalidationTests : IClassFixture<RedisServerFixture>
         Assert.False(monitor1.IsDisposed, "should not be removed before notification");
         Assert.False(monitor2.IsDisposed, "should not be removed before notification");
 
-        //act
         var subscriber = _redis.GetSubscriber();
         subscriber.Publish(RedisChannel.Literal(Constants.DefaultInvalidationChannel), Encoding.Default.GetBytes(invalidationKey));
 
         // hack wait for notification
         Thread.Sleep(50);
 
-        //assert
         Assert.False(_localCache.Contains(baseCacheKey + "1"), "cache item should be removed");
         Assert.False(_localCache.Contains(baseCacheKey + "2"), "cache item should be removed");
         Assert.True(monitor1.IsDisposed, "should be disposed");
@@ -91,13 +86,11 @@ public class InvalidationTests : IClassFixture<RedisServerFixture>
 
         Assert.Equal(2, _localCache.GetCount());
 
-        // act
         await InvalidationManager.InvalidateAsync(baseCacheKey + "1");
         await InvalidationManager.InvalidateAsync(baseCacheKey + "2");
 
         Thread.Sleep(50);
 
-        //assert
         Assert.Equal(0, _localCache.GetCount());
         Assert.False(_localCache.Contains(baseCacheKey + "1"), "cache item should be removed");
         Assert.False(_localCache.Contains(baseCacheKey + "2"), "cache item should be removed");
@@ -122,14 +115,13 @@ public class InvalidationTests : IClassFixture<RedisServerFixture>
         Assert.True(_localCache.Contains(baseCacheKey + "1"), "cache item 1 should exist initially");
         Assert.True(_localCache.Contains(baseCacheKey + "2"), "cache item 2 should exist initially");
 
-        // act - Use direct Redis publish to test change monitor functionality
+        // Use direct Redis publish to test change monitor functionality
         var subscriber = _redis.GetSubscriber();
         subscriber.Publish(RedisChannel.Literal(Constants.DefaultInvalidationChannel), invalidationKey);
 
         // Wait for notification to be processed
         Thread.Sleep(100);
 
-        //assert
         Assert.Equal(0, _localCache.GetCount());
         Assert.False(_localCache.Contains(baseCacheKey + "1"), "cache item should be removed");
         Assert.False(_localCache.Contains(baseCacheKey + "2"), "cache item should be removed");
@@ -154,7 +146,7 @@ public class InvalidationTests : IClassFixture<RedisServerFixture>
         Assert.True(_localCache.Contains(baseCacheKey + "1"), "cache item 1 should exist initially");
         Assert.True(_localCache.Contains(baseCacheKey + "2"), "cache item 2 should exist initially");
 
-        // act - Test invalidation by directly invalidating via pub/sub in servicestack redis
+        // Test invalidation by directly invalidating via pub/sub in servicestack redis
         var db = _redis.GetDatabase(0);
         await db.Multiplexer.GetSubscriber().SubscribeAsync(RedisChannel.Literal(Constants.DefaultInvalidationChannel), (channel, message) =>
         {
@@ -166,7 +158,6 @@ public class InvalidationTests : IClassFixture<RedisServerFixture>
         Thread.Sleep(100);
         Output.WriteLine($"Cache count after invalidation: {_localCache.GetCount()}");
 
-        //assert
         Assert.Equal(0, _localCache.GetCount());
         Assert.False(_localCache.Contains(baseCacheKey + "1"), "cache item should be removed");
         Assert.False(_localCache.Contains(baseCacheKey + "2"), "cache item should be removed");

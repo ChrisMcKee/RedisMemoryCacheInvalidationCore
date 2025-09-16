@@ -1,4 +1,4 @@
-﻿using RedisMemoryCacheInvalidation.Utils;
+﻿using Microsoft.Extensions.Logging;
 using StackExchange.Redis;
 
 namespace RedisMemoryCacheInvalidation.Redis
@@ -12,7 +12,9 @@ namespace RedisMemoryCacheInvalidation.Redis
         /// Initializes a new instance of the <see cref="ExistingRedisConnection"/> class.
         /// </summary>
         /// <param name="mux">The existing Redis connection multiplexer.</param>
-        public ExistingRedisConnection(IConnectionMultiplexer mux)
+        /// <param name="logger">Optional logger for diagnostic information.</param>
+        public ExistingRedisConnection(IConnectionMultiplexer mux, ILogger logger = null)
+            : base(logger)
         {
             Multiplexer = mux;
         }

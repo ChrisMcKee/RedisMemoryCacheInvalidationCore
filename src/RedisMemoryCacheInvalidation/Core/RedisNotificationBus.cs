@@ -2,6 +2,7 @@
 using System.Runtime.Caching;
 using System.Threading.Tasks;
 using RedisMemoryCacheInvalidation.Redis;
+using RedisMemoryCacheInvalidation.Utils;
 using StackExchange.Redis;
 
 namespace RedisMemoryCacheInvalidation.Core
@@ -38,7 +39,7 @@ namespace RedisMemoryCacheInvalidation.Core
         public RedisNotificationBus(string redisConfiguration, InvalidationSettings settings)
             : this(settings)
         {
-            Connection = RedisConnectionFactory.New(redisConfiguration);
+            Connection = RedisConnectionFactory.New(redisConfiguration, settings.EnableResilience, settings.Logger, settings.HealthCheckIntervalMs);
         }
 
         /// <summary>
@@ -49,7 +50,7 @@ namespace RedisMemoryCacheInvalidation.Core
         public RedisNotificationBus(ConnectionMultiplexer mux, InvalidationSettings settings)
             : this(settings)
         {
-            Connection = RedisConnectionFactory.New(mux);
+            Connection = RedisConnectionFactory.New(mux, settings.EnableResilience, settings.Logger, settings.HealthCheckIntervalMs);
         }
 
         /// <summary>
@@ -57,10 +58,26 @@ namespace RedisMemoryCacheInvalidation.Core
         /// </summary>
         public void Start()
         {
-            Connection.Connect();
+            SafeLogger.LogInformation(_settings.Logger, "Starting Redis notification bus");
+
+            if(!Connection.Connect())
+            {
+                SafeLogger.LogError(_settings.Logger, "Failed to establish Redis connection");
+                return;
+            }
+
+            SafeLogger.LogInformation(_settings.Logger, "Successfully connected to Redis");
+
             Connection.Subscribe(Constants.DefaultInvalidationChannel, OnInvalidationMessage);
+            SafeLogger.LogTrace(_settings.Logger, "Subscribed to invalidation channel: {Channel}", Constants.DefaultInvalidationChannel);
+
             if(EnableKeySpaceNotifications)
+            {
                 Connection.Subscribe(Constants.DefaultKeyspaceChannel, OnKeySpaceNotificationMessage);
+                SafeLogger.LogTrace(_settings.Logger, "Subscribed to keyspace notifications channel: {Channel}", Constants.DefaultKeyspaceChannel);
+            }
+
+            SafeLogger.LogInformation(_settings.Logger, "Redis notification bus started successfully");
         }
 
         /// <summary>
@@ -68,7 +85,9 @@ namespace RedisMemoryCacheInvalidation.Core
         /// </summary>
         public void Stop()
         {
+            SafeLogger.LogInformation(_settings.Logger, "Stopping Redis notification bus");
             Connection.Disconnect();
+            SafeLogger.LogInformation(_settings.Logger, "Redis notification bus stopped");
         }
 
         /// <summary>
@@ -78,15 +97,31 @@ namespace RedisMemoryCacheInvalidation.Core
         /// <returns>A task that represents the asynchronous operation and returns the number of subscribers that received the message.</returns>
         public Task<long> NotifyAsync(string key)
         {
+            SafeLogger.LogTrace(_settings.Logger, "Publishing invalidation message for key: {Key}", key);
+
+            if (_settings.EnableResilience)
+            {
+                return RetryHelper.ExecuteWithRetryAsync(
+                    () => Connection.PublishAsync(Constants.DefaultInvalidationChannel, key),
+                    _settings.MaxRetryAttempts,
+                    _settings.RetryDelayMs,
+                    true,
+                    0L,
+                    _settings.Logger);
+            }
+
             return Connection.PublishAsync(Constants.DefaultInvalidationChannel, key);
         }
 
         private void OnInvalidationMessage(RedisChannel pattern, RedisValue data)
         {
-            if(pattern == Constants.DefaultInvalidationChannel)
+            if(pattern != Constants.DefaultInvalidationChannel)
             {
-                ProcessInvalidationMessage(data.ToString());
+                return;
             }
+
+            SafeLogger.LogTrace(_settings.Logger, "Received invalidation message on channel {Channel}: {Data}", pattern, data);
+            ProcessInvalidationMessage(data.ToString());
         }
 
         private void OnKeySpaceNotificationMessage(RedisChannel pattern, RedisValue data)
@@ -96,6 +131,7 @@ namespace RedisMemoryCacheInvalidation.Core
             switch(prefix)
             {
                 case keyEventPrefix:
+                    SafeLogger.LogTrace(_settings.Logger, "Received keyspace notification on channel {Channel}: {Data}", pattern, data);
                     ProcessInvalidationMessage(data.ToString());
                     break;
                 default:
@@ -106,19 +142,34 @@ namespace RedisMemoryCacheInvalidation.Core
 
         private void ProcessInvalidationMessage(string key)
         {
-            if((InvalidationStrategy & InvalidationStrategyType.ChangeMonitor) == InvalidationStrategyType.ChangeMonitor)
-            {
-                Notifier.Notify(key);
-            }
+            SafeLogger.LogTrace(_settings.Logger, "Processing invalidation message for key: {Key}, Strategy: {Strategy}", key, InvalidationStrategy);
 
-            if((InvalidationStrategy & InvalidationStrategyType.AutoCacheRemoval) == InvalidationStrategyType.AutoCacheRemoval && LocalCache != null)
+            try
             {
-                LocalCache.Remove(key);
-            }
+                if((InvalidationStrategy & InvalidationStrategyType.ChangeMonitor) == InvalidationStrategyType.ChangeMonitor)
+                {
+                    SafeLogger.LogTrace(_settings.Logger, "Notifying change monitors for key: {Key}", key);
+                    Notifier.Notify(key);
+                }
 
-            if((InvalidationStrategy & InvalidationStrategyType.External) == InvalidationStrategyType.External && NotificationCallback != null)
+                if((InvalidationStrategy & InvalidationStrategyType.AutoCacheRemoval) == InvalidationStrategyType.AutoCacheRemoval && LocalCache != null)
+                {
+                    SafeLogger.LogTrace(_settings.Logger, "Auto-removing from cache key: {Key}", key);
+                    LocalCache.Remove(key);
+                }
+
+                if((InvalidationStrategy & InvalidationStrategyType.External) == InvalidationStrategyType.External && NotificationCallback != null)
+                {
+                    SafeLogger.LogTrace(_settings.Logger, "Invoking external callback for key: {Key}", key);
+                    NotificationCallback?.Invoke(key);
+                }
+
+                SafeLogger.LogTrace(_settings.Logger, "Successfully processed invalidation message for key: {Key}", key);
+            }
+            catch(Exception ex)
             {
-                NotificationCallback?.Invoke(key);
+                SafeLogger.LogError(_settings.Logger, ex, "Failed to process invalidation message for key: {Key}", key);
+                // Individual strategy failures shouldn't crash the entire system
             }
         }
     }
