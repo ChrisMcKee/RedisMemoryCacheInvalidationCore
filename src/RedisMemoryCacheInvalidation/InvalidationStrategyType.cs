@@ -5,7 +5,7 @@ namespace RedisMemoryCacheInvalidation
     /// Cache Invalidation Strategy.
     /// </summary>
     [Flags]
-    public enum InvalidationStrategyType
+    public enum InvalidationStrategyType : short
     {
         Undefined = 0,
         /// <summary>

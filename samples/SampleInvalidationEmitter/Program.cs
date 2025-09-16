@@ -38,4 +38,3 @@ while(true)
     await Task.Delay(TimeSpan.FromSeconds(5));
     Console.WriteLine("Memory Count after invalidation: " + MemoryCache.Default.GetCount());
 }
-Console.ReadLine();
