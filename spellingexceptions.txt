@@ -12,3 +12,4 @@ unsub
 Unsubscriber
 unsubscriber
 Xunit
+servicestack
