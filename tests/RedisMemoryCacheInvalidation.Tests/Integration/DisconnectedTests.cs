@@ -18,10 +18,10 @@ public class DisconnectedTests
         //test more disconnected scenarios
         InvalidationManager.Configure("blabblou", new InvalidationSettings());
         Assert.False(InvalidationManager.IsConnected);
-        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-        {
-            await InvalidationManager.InvalidateAsync("mykey");
-        });
+        
+        // When not connected, InvalidateAsync should return 0 (no subscribers) instead of throwing
+        var result = await InvalidationManager.InvalidateAsync("mykey");
+        Assert.Equal(0L, result);
     }
 
     [Fact]

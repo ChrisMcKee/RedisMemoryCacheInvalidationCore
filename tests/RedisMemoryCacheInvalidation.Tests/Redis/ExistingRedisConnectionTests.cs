@@ -92,7 +92,7 @@ public class ExistingRedisConnectionTests
         var published = await cnx.PublishAsync(channel, value);
 
         Assert.Equal(10L, published);
-        mockOfSubscriber.Verify(m => m.PublishAsync(channel, value, It.IsAny<CommandFlags>()), Times.Once);
+        mockOfSubscriber.Verify(m => m.PublishAsync(RedisChannel.Literal(channel), value, It.IsAny<CommandFlags>()), Times.Once);
     }
 
     [Fact]
@@ -104,7 +104,7 @@ public class ExistingRedisConnectionTests
 
         cnx.Subscribe(channel, action);
 
-        mockOfSubscriber.Verify(s => s.Subscribe(channel, action, It.IsAny<CommandFlags>()), Times.Once);
+        mockOfSubscriber.Verify(s => s.Subscribe(RedisChannel.Literal(channel), action, It.IsAny<CommandFlags>()), Times.Once);
     }
 
     [Fact]
