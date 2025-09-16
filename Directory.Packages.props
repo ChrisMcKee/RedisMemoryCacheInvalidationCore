@@ -9,11 +9,11 @@
     <PackageVersion Include="GitHubActionsTestLogger" Version="2.4.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="Moq" Version="4.20.70" />
-    <PackageVersion Include="redis-inside" Version="3.3.0" />
     <PackageVersion Include="ReportGenerator" Version="5.4.13" />
     <PackageVersion Include="StackExchange.Redis" Version="2.9.17" />
     <PackageVersion Include="System.Runtime.Caching" Version="9.0.9" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <PackageVersion Include="Testcontainers.Redis" Version="4.7.0" />
   </ItemGroup>
 </Project>

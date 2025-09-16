@@ -13,19 +13,19 @@ using Xunit;
 namespace RedisMemoryCacheInvalidation.Integration.Tests;
 
 [Collection("RedisServer")]
-public class InvalidationTests
+public class InvalidationTests : IClassFixture<RedisServerFixture>
 {
     private readonly MemoryCache _localCache;
     private readonly Fixture _fixture;
-    private RedisServerFixture _redis;
+    private readonly RedisServerFixture _redis;
 
     public InvalidationTests(RedisServerFixture redisServer)
     {
         _localCache = new MemoryCache(Guid.NewGuid().ToString());
         _localCache.Trim(100);
 
-        redisServer.Reset();
         _redis = redisServer;
+        _redis.Reset();
 
         InvalidationManager.NotificationBus = null;
         InvalidationManager.Configure(_redis.GetEndpoint(), new InvalidationSettings

@@ -1,43 +1,63 @@
 ﻿using System;
-using System.Threading;
+using System.Threading.Tasks;
 using StackExchange.Redis;
+using Testcontainers.Redis;
+using Xunit;
 
 namespace RedisMemoryCacheInvalidation.Tests.Fixtures;
 
-public class RedisServerFixture : IDisposable
+public class RedisServerFixture : IAsyncLifetime
 {
-    private static RedisInside.Redis Redis;
-    private static string RedisEndpoint;
-    private readonly ConnectionMultiplexer _mux;
+    private readonly RedisContainer _redisContainer;
+    private ConnectionMultiplexer _mux;
+    private string _redisEndpoint;
 
     public RedisServerFixture()
     {
-        Redis = new RedisInside.Redis();
-        Thread.Sleep(100);
-        _mux = ConnectionMultiplexer.Connect(new ConfigurationOptions { AllowAdmin = true, AbortOnConnectFail = false, EndPoints = { Redis.Endpoint } });
-        RedisEndpoint = Redis.Endpoint.ToString();
-        _mux.GetServer(Redis.Endpoint.ToString() ?? string.Empty).ConfigSet("notify-keyspace-events", "KEA");
-
-        _mux.GetDatabase().StringSetAsync("key", "value");
-        var actualValue = _mux.GetDatabase().StringGetAsync("key"); ;
+        _redisContainer = new RedisBuilder()
+            .WithImage("redis:7-alpine")
+            .WithPortBinding(6379, true)
+            .Build();
     }
 
-    public static bool IsRunning => Redis != null;
-
-    public void Dispose()
+    public async Task InitializeAsync()
     {
-        if(_mux != null && _mux.IsConnected)
-            _mux.Close(false);
-        Redis.Dispose();
+        await _redisContainer.StartAsync();
+        
+        _redisEndpoint = _redisContainer.GetConnectionString();
+        _mux = await ConnectionMultiplexer.ConnectAsync(new ConfigurationOptions 
+        { 
+            AllowAdmin = true, 
+            AbortOnConnectFail = false, 
+            EndPoints = { _redisEndpoint }
+        });
+        
+        // Configure keyspace notifications
+        var server = _mux.GetServer(_redisEndpoint);
+        await server.ConfigSetAsync("notify-keyspace-events", "KEA");
+
+        // Test connection
+        var db = _mux.GetDatabase();
+        await db.StringSetAsync("key", "value");
+        var actualValue = await db.StringGetAsync("key");
+    }
+
+    public async Task DisposeAsync()
+    {
+        if (_mux != null && _mux.IsConnected)
+            await _mux.CloseAsync();
+        
+        await _redisContainer.DisposeAsync();
     }
 
     public IDatabase GetDatabase(int db)
     {
         return _mux.GetDatabase(db);
     }
+
     public string GetEndpoint()
     {
-        return RedisEndpoint;
+        return _redisEndpoint;
     }
 
     public ISubscriber GetSubscriber()
@@ -47,6 +67,7 @@ public class RedisServerFixture : IDisposable
 
     public void Reset()
     {
-        _mux.GetServer(Redis.Endpoint.ToString() ?? string.Empty).FlushAllDatabases();
+        var server = _mux.GetServer(_redisEndpoint);
+        server.FlushAllDatabases();
     }
 }
