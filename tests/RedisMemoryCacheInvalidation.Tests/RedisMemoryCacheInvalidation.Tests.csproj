@@ -3,6 +3,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <AssemblyTitle>RedisMemoryCacheInvalidation.Test</AssemblyTitle>
     <Product>RedisMemoryCacheInvalidation.Test</Product>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AutoFixture" />

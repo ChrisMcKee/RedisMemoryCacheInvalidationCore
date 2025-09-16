@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.Caching;
 using System.Text;
 using System.Threading;
@@ -9,6 +10,7 @@ using RedisMemoryCacheInvalidation.Tests;
 using RedisMemoryCacheInvalidation.Tests.Fixtures;
 using StackExchange.Redis;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace RedisMemoryCacheInvalidation.Integration.Tests;
 
@@ -19,8 +21,13 @@ public class InvalidationTests : IClassFixture<RedisServerFixture>
     private readonly Fixture _fixture;
     private readonly RedisServerFixture _redis;
 
-    public InvalidationTests(RedisServerFixture redisServer)
+    private ITestOutputHelper Output { get; }
+
+    public InvalidationTests(RedisServerFixture redisServer, ITestOutputHelper outputHelper)
     {
+
+        Output = outputHelper;
+
         _localCache = new MemoryCache(Guid.NewGuid().ToString());
         _localCache.Trim(100);
 
@@ -32,6 +39,10 @@ public class InvalidationTests : IClassFixture<RedisServerFixture>
         {
             InvalidationStrategy = InvalidationStrategyType.All,
             EnableKeySpaceNotifications = true,
+            InvalidationCallback = s =>
+            {
+                Output.WriteLine("RedisCacheInvalidation : Invalidating {0}, Count: {1}", s, _localCache.GetCount());
+            },
             TargetCache = _localCache
         });
 
@@ -124,12 +135,13 @@ public class InvalidationTests : IClassFixture<RedisServerFixture>
         Assert.False(_localCache.Contains(baseCacheKey + "2"), "cache item should be removed");
     }
 
-    [Fact(Skip = "Keyspace notifications not working reliably in test environment")]
+    [Fact]
     [Trait(TestConstants.TestCategory, TestConstants.IntegrationTestCategory)]
-    public void MultiplesDeps_WhenSpaceNotification_ShouldBeRemoved()
+    public async Task MultiplesDeps_WhenInvalidationKey_ShouldBeRemoved()
     {
         var baseCacheKey = _fixture.Create<string>();
         var invalidationKey = _fixture.Create<string>();
+
 
         var monitor1 = InvalidationManager.CreateChangeMonitor(invalidationKey);
         var monitor2 = InvalidationManager.CreateChangeMonitor(invalidationKey);
@@ -142,12 +154,17 @@ public class InvalidationTests : IClassFixture<RedisServerFixture>
         Assert.True(_localCache.Contains(baseCacheKey + "1"), "cache item 1 should exist initially");
         Assert.True(_localCache.Contains(baseCacheKey + "2"), "cache item 2 should exist initially");
 
-        // act - Test keyspace notifications by setting a Redis key
+        // act - Test invalidation by directly invalidating via pub/sub in servicestack redis
         var db = _redis.GetDatabase(0);
-        db.StringSet(invalidationKey, "notused");
+        await db.Multiplexer.GetSubscriber().SubscribeAsync(RedisChannel.Literal(Constants.DEFAULT_INVALIDATION_CHANNEL), (channel, message) =>
+        {
+            Output.WriteLine($"Received message on channel {channel}: {message}");
+        });
+        await db.PublishAsync(RedisChannel.Literal(Constants.DEFAULT_INVALIDATION_CHANNEL), invalidationKey);
 
-        // Wait for keyspace notification to be processed
-        Thread.Sleep(1000);
+        // Wait for invalidation to be processed
+        Thread.Sleep(100);
+        Output.WriteLine($"Cache count after invalidation: {_localCache.GetCount()}");
 
         //assert
         Assert.Equal(0, _localCache.GetCount());

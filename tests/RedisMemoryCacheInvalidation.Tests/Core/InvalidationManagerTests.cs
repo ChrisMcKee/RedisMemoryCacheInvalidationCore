@@ -37,6 +37,9 @@ public class InvalidationManagerTests
     [Trait(TestConstants.TestCategory, TestConstants.UnitTestCategory)]
     public async Task CreateChangeMonitorBadArgs_ShouldThrowException()
     {
+        // Ensure InvalidationManager is not configured for this test
+        InvalidationManager.NotificationBus = null;
+        
         Assert.Throws<InvalidOperationException>(() => { InvalidationManager.CreateChangeMonitor("rzer"); });
         Assert.Throws<InvalidOperationException>(() => { InvalidationManager.CreateChangeMonitor(new CacheItem("rzesdqr")); });
         await Assert.ThrowsAsync<InvalidOperationException>(async () => await InvalidationManager.InvalidateAsync("rzaaer"));
