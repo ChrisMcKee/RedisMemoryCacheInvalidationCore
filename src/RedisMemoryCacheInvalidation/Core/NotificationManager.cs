@@ -17,7 +17,6 @@ namespace RedisMemoryCacheInvalidation.Core
         {
             SubscriptionsByTopic = new ConcurrentDictionary<string, SynchronizedCollection<INotificationObserver<string>>>();
         }
-
         public void Notify(string topicKey)
         {
             var subscriptions = SubscriptionsByTopic.GetOrAdd(topicKey, new SynchronizedCollection<INotificationObserver<string>>());

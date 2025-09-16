@@ -14,7 +14,7 @@ namespace RedisMemoryCacheInvalidation.Redis
 
         public override bool Connect()
         {
-            if(multiplexer == null)
+            if(Multiplexer == null)
             {
                 //overrides here
                 options.ConnectTimeout = 5000;
@@ -24,16 +24,16 @@ namespace RedisMemoryCacheInvalidation.Redis
                 options.AbortOnConnectFail = false;
                 options.ClientName = "InvalidationClient_" + Environment.MachineName + "_" + Assembly.GetCallingAssembly().GetName().Version;
 
-                multiplexer = ConnectionMultiplexer.Connect(options);
+                Multiplexer = ConnectionMultiplexer.Connect(options);
             }
 
-            return multiplexer.IsConnected;
+            return Multiplexer.IsConnected;
         }
 
         public override void Disconnect()
         {
             UnsubscribeAll();
-            multiplexer.Close(false);
+            Multiplexer.Close(false);
         }
     }
 }

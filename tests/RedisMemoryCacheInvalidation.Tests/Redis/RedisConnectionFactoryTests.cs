@@ -3,27 +3,26 @@ using RedisMemoryCacheInvalidation.Redis;
 using StackExchange.Redis;
 using Xunit;
 
-namespace RedisMemoryCacheInvalidation.Tests.Redis
+namespace RedisMemoryCacheInvalidation.Tests.Redis;
+
+public class RedisConnectionFactoryTests
 {
-    public class RedisConnectionFactoryTests
+    [Fact]
+    [Trait(TestConstants.TestCategory, TestConstants.UnitTestCategory)]
+    public void WhenNewWithConfigOptions_Should_Create_StandaloneRedisConnection()
     {
-        [Fact]
-        [Trait(TestConstants.TestCategory, TestConstants.UnitTestCategory)]
-        public void WhenNewWithConfigOptions_Should_Create_StandaloneRedisConnection()
-        {
-            var cnx = RedisConnectionFactory.New("local:6379");
+        var cnx = RedisConnectionFactory.New("local:6379");
 
-            Assert.IsType<StandaloneRedisConnection>(cnx);
-        }
+        Assert.IsType<StandaloneRedisConnection>(cnx);
+    }
 
-        [Fact]
-        [Trait(TestConstants.TestCategory, TestConstants.UnitTestCategory)]
-        public void WhenNewWithMux_Should_Create_ExistingRedisConnection()
-        {
-            var mockOfMux = new Mock<IConnectionMultiplexer>();
-            var cnx = RedisConnectionFactory.New(mockOfMux.Object);
+    [Fact]
+    [Trait(TestConstants.TestCategory, TestConstants.UnitTestCategory)]
+    public void WhenNewWithMux_Should_Create_ExistingRedisConnection()
+    {
+        var mockOfMux = new Mock<IConnectionMultiplexer>();
+        var cnx = RedisConnectionFactory.New(mockOfMux.Object);
 
-            Assert.IsType<ExistingRedisConnection>(cnx);
-        }
+        Assert.IsType<ExistingRedisConnection>(cnx);
     }
 }

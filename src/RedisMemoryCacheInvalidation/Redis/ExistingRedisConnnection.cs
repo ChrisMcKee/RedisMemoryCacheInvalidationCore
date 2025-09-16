@@ -7,7 +7,7 @@ namespace RedisMemoryCacheInvalidation.Redis
     {
         public ExistingRedisConnection(IConnectionMultiplexer mux)
         {
-            multiplexer = mux;
+            Multiplexer = mux;
         }
 
         public override bool Connect()

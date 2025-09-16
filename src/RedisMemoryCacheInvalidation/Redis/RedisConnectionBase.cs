@@ -8,18 +8,18 @@ namespace RedisMemoryCacheInvalidation.Redis
 {
     internal abstract class RedisConnectionBase : IRedisConnection
     {
-        protected IConnectionMultiplexer multiplexer;
+        protected IConnectionMultiplexer Multiplexer;
 
         public bool IsConnected
         {
-            get { return multiplexer != null && multiplexer.IsConnected; }
+            get { return Multiplexer != null && Multiplexer.IsConnected; }
         }
 
         public void Subscribe(string channel, Action<RedisChannel, RedisValue> handler)
         {
             if(IsConnected)
             {
-                var subscriber = multiplexer.GetSubscriber();
+                var subscriber = Multiplexer.GetSubscriber();
                 subscriber.Subscribe(RedisChannel.Literal(channel), handler);
             }
         }
@@ -31,7 +31,7 @@ namespace RedisMemoryCacheInvalidation.Redis
                 return;
             }
 
-            multiplexer.GetSubscriber().UnsubscribeAll();
+            Multiplexer.GetSubscriber().UnsubscribeAll();
         }
 
         public Task<long> PublishAsync(string channel, string value)
@@ -41,7 +41,7 @@ namespace RedisMemoryCacheInvalidation.Redis
                 return TaskCache.FromResult(0L);
             }
 
-            return multiplexer.GetSubscriber().PublishAsync(RedisChannel.Literal(channel), value);
+            return Multiplexer.GetSubscriber().PublishAsync(RedisChannel.Literal(channel), value);
 
         }
         public Task<KeyValuePair<string, string>[]> GetConfigAsync()
@@ -58,11 +58,11 @@ namespace RedisMemoryCacheInvalidation.Redis
 
         protected IServer GetServer()
         {
-            var endpoints = multiplexer.GetEndPoints();
+            var endpoints = Multiplexer.GetEndPoints();
             IServer result = null;
             foreach(var endpoint in endpoints)
             {
-                var server = multiplexer.GetServer(endpoint);
+                var server = Multiplexer.GetServer(endpoint);
                 if(server.IsReplica || !server.IsConnected) continue;
                 if(result != null)
                 {

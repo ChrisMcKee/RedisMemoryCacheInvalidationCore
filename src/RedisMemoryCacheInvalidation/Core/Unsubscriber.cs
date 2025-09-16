@@ -21,9 +21,7 @@ namespace RedisMemoryCacheInvalidation.Core
         public void Dispose()
         {
             if(observer != null && observers.Contains(observer))
-            {
                 observers.Remove(observer);
-            }
         }
     }
 }

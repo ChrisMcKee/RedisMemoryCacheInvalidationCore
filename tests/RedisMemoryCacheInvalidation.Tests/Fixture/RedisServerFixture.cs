@@ -1,54 +1,52 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 using StackExchange.Redis;
 
-namespace RedisMemoryCacheInvalidation.Tests.Fixtures
+namespace RedisMemoryCacheInvalidation.Tests.Fixtures;
+
+public class RedisServerFixture : IDisposable
 {
-    public class RedisServerFixture : IDisposable
+    private static RedisInside.Redis Redis;
+    private static string RedisEndpoint;
+    private readonly ConnectionMultiplexer _mux;
+
+    public RedisServerFixture()
     {
-        private static RedisInside.Redis redis;
-        private static string RedisEndpoint;
-        private readonly ConnectionMultiplexer mux;
+        Redis = new RedisInside.Redis();
+        Thread.Sleep(100);
+        _mux = ConnectionMultiplexer.Connect(new ConfigurationOptions { AllowAdmin = true, AbortOnConnectFail = false, EndPoints = { Redis.Endpoint } });
+        RedisEndpoint = Redis.Endpoint.ToString();
+        _mux.GetServer(Redis.Endpoint.ToString() ?? string.Empty).ConfigSet("notify-keyspace-events", "KEA");
 
-        public RedisServerFixture()
-        {
-            redis = new RedisInside.Redis();
-            Thread.Sleep(100);
-            mux = ConnectionMultiplexer.Connect(new ConfigurationOptions { AllowAdmin = true, AbortOnConnectFail = false, EndPoints = { redis.Endpoint } });
-            RedisEndpoint = redis.Endpoint.ToString();
-            mux.GetServer(redis.Endpoint.ToString()).ConfigSet("notify-keyspace-events", "KEA");
+        _mux.GetDatabase().StringSetAsync("key", "value");
+        var actualValue = _mux.GetDatabase().StringGetAsync("key"); ;
+    }
 
-            mux.GetDatabase().StringSetAsync("key", "value");
-            var actualValue = mux.GetDatabase().StringGetAsync("key"); ;
-        }
+    public static bool IsRunning => Redis != null;
 
-        public static bool IsRunning => redis != null;
+    public void Dispose()
+    {
+        if(_mux != null && _mux.IsConnected)
+            _mux.Close(false);
+        Redis.Dispose();
+    }
 
-        public void Dispose()
-        {
-            if(mux != null && mux.IsConnected)
-                mux.Close(false);
-            redis.Dispose();
-        }
+    public IDatabase GetDatabase(int db)
+    {
+        return _mux.GetDatabase(db);
+    }
+    public string GetEndpoint()
+    {
+        return RedisEndpoint;
+    }
 
-        public IDatabase GetDatabase(int db)
-        {
-            return mux.GetDatabase(db);
-        }
-        public string GetEndpoint()
-        {
-            return RedisEndpoint;
-        }
+    public ISubscriber GetSubscriber()
+    {
+        return _mux.GetSubscriber();
+    }
 
-        public ISubscriber GetSubscriber()
-        {
-            return mux.GetSubscriber();
-        }
-
-        public void Reset()
-        {
-            mux.GetServer(redis.Endpoint.ToString()).FlushAllDatabases();
-        }
+    public void Reset()
+    {
+        _mux.GetServer(Redis.Endpoint.ToString() ?? string.Empty).FlushAllDatabases();
     }
 }
