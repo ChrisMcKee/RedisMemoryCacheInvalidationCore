@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netstandard2.0;net8.0;net48</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net10.0;net48</TargetFrameworks>
     <AssemblyTitle>RedisMemoryCacheInvalidation</AssemblyTitle>
     <Company>RedisMemoryCacheInvalidation - Core</Company>
     <Author>RedisMemoryCacheInvalidation - Core</Author>
     <Product>RedisMemoryCacheInvalidation</Product>
-    <Copyright>2014-2025 Chris McKee, Lemaitre/Cybermaxs</Copyright>
+    <Copyright>2014-2026 Chris McKee, Lemaitre/Cybermaxs</Copyright>
     <OutputTypeEx>Library</OutputTypeEx>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IncludeSource>true</IncludeSource>
@@ -16,10 +16,10 @@
     <!-- Default to unsigned version -->
     <PackageId Condition="'$(SignAssembly)' != 'true'">RedisMemoryCacheInvalidationCore</PackageId>
     <PackageId Condition="'$(SignAssembly)' == 'true'">RedisMemoryCacheInvalidationCoreStrong</PackageId>
-    
+
     <Title Condition="'$(SignAssembly)' != 'true'">RedisMemoryCacheInvalidationCore</Title>
     <Title Condition="'$(SignAssembly)' == 'true'">RedisMemoryCacheInvalidationCore Strong Signed</Title>
-    
+
     <Summary>A redis-powered local memory cache invalidation mechanism.</Summary>
     <Description>This package allow to invalidate local memory cache items with the help of StackExchange.Redis</Description>
 
@@ -31,15 +31,16 @@
     <Version>2.5.0</Version>
 
     <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageIconUrl>iconpkg.png</PackageIconUrl>
+    <PackageIconUrl></PackageIconUrl>
+    <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <!-- Package content files -->
   <ItemGroup>
-    <None Include="..\..\iconpkg.png" Pack="true" PackagePath="\" />
-    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
-    <None Include="..\..\readme.md" Pack="true" PackagePath="\" />
+    <None Include="../../logo.png" Pack="true" Visible="false" PackagePath=""/>
+    <None Include="../../LICENSE" Pack="true" Visible="false" PackagePath=""/>
+    <None Include="../../readme.md" Pack="true" Visible="false" PackagePath=""/>
   </ItemGroup>
 
   <!-- Assembly signing configuration -->

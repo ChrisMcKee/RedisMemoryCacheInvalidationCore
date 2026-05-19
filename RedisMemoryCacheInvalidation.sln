@@ -18,6 +18,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".sln", ".sln", "{AF8D729E-C07A-4E02-9F4B-3E28B93FFF86}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Packages.props = Directory.Packages.props
+		.github\workflows\MergeToMain.yml = .github\workflows\MergeToMain.yml
+		.github\workflows\PullRequest.yml = .github\workflows\PullRequest.yml
+		.github\workflows\Release.yml = .github\workflows\Release.yml
 	EndProjectSection
 EndProject
 Global
