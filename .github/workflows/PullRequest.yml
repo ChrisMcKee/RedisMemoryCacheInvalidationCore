@@ -8,8 +8,28 @@ env:
   DOTNET_NOLOGO: true
 
 jobs:
+  integration_tests:
+    name: Run integration tests (Linux + Docker)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
+        with:
+          dotnet-version: |
+            10.0.x
+
+      - run: dotnet restore tests/RedisMemoryCacheInvalidation.Tests/RedisMemoryCacheInvalidation.Tests.csproj --verbosity minimal
+
+      - name: Run integration tests (Testcontainers)
+        run: dotnet test tests/RedisMemoryCacheInvalidation.Tests/RedisMemoryCacheInvalidation.Tests.csproj --configuration Release --framework net10.0 --no-restore --verbosity minimal
+
   build_and_pack_release:
-    name: Build and pack release
+    name: Build and pack release (Windows)
+    needs: integration_tests
     runs-on: windows-latest
 
     steps:
@@ -24,10 +44,11 @@ jobs:
 
       - name: Setup .NET
         uses: actions/setup-dotnet@c2fa09f4bde5ebb9d1777cf28262a3eb3db3ced7 # v5.2.0
+        with:
+          dotnet-version: |
+            10.0.x
 
       - run: dotnet restore --verbosity minimal
 
       - run: dotnet build --configuration Release -p:ContinuousIntegrationBuild=true -p:VersionPrefix=$env:VERSION_PREFIX --version-suffix $env:VERSION_SUFFIX
 
-      - name: Run integration tests (Testcontainers)
-        run: dotnet test tests/RedisMemoryCacheInvalidation.Tests/ --configuration Release --no-build --verbosity minimal
