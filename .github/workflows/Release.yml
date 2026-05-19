@@ -77,10 +77,15 @@ jobs:
       - name: Publish to GPR
         shell: pwsh
         run: |
-          dotnet nuget push "./artifacts/*.nupkg" `
-            --no-symbols `
-            --api-key "${{ secrets.GITHUB_TOKEN }}" `
-            --source "https://nuget.pkg.github.com/${{ github.repository_owner }}"
+          $packages = Get-ChildItem -Path "./artifacts/*.nupkg" -File | Where-Object { $_.Name -notlike "*.symbols.nupkg" }
+          if (-not $packages) { throw "No NuGet packages found in ./artifacts." }
+
+          foreach ($package in $packages) {
+            dotnet nuget push $package.FullName `
+              --no-symbols `
+              --api-key "${{ secrets.GITHUB_TOKEN }}" `
+              --source "https://nuget.pkg.github.com/${{ github.repository_owner }}"
+          }
 
       - name: NuGet login (OIDC → temp API key)
         uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1
@@ -91,6 +96,11 @@ jobs:
       - name: Publish to nuget.org
         shell: pwsh
         run: |
-          dotnet nuget push "./artifacts/*.nupkg" `
-            --api-key "${{steps.login.outputs.NUGET_API_KEY}}" `
-            --source "https://api.nuget.org/v3/index.json"
+          $packages = Get-ChildItem -Path "./artifacts/*.nupkg" -File | Where-Object { $_.Name -notlike "*.symbols.nupkg" }
+          if (-not $packages) { throw "No NuGet packages found in ./artifacts." }
+
+          foreach ($package in $packages) {
+            dotnet nuget push $package.FullName `
+              --api-key "${{steps.login.outputs.NUGET_API_KEY}}" `
+              --source "https://api.nuget.org/v3/index.json"
+          }

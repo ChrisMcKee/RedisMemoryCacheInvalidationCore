@@ -62,13 +62,18 @@ jobs:
       - name: Publish artifacts
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: NuGetPackage.${{ env.VERSION_PREFIX }}-${{ env.VERSION_SUFFIX }}.nupkg.zip
+          name: NuGetPackage.${{ env.VERSION_PREFIX }}-${{ env.VERSION_SUFFIX }}
           path: ./artifacts/*
 
       - name: Publish to GPR
         shell: pwsh
         run: |
-          dotnet nuget push "./artifacts/*.nupkg" `
-            --no-symbols `
-            --api-key "${{ secrets.GITHUB_TOKEN }}" `
-            --source "https://nuget.pkg.github.com/${{ github.repository_owner }}"
+          $packages = Get-ChildItem -Path "./artifacts/*.nupkg" -File | Where-Object { $_.Name -notlike "*.symbols.nupkg" }
+          if (-not $packages) { throw "No NuGet packages found in ./artifacts." }
+
+          foreach ($package in $packages) {
+            dotnet nuget push $package.FullName `
+              --no-symbols `
+              --api-key "${{ secrets.GITHUB_TOKEN }}" `
+              --source "https://nuget.pkg.github.com/${{ github.repository_owner }}"
+          }
