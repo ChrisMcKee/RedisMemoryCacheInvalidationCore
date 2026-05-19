@@ -14,7 +14,7 @@ public class RedisServerFixture : IAsyncLifetime
     public RedisServerFixture()
     {
         _redisContainer = new RedisBuilder()
-            .WithImage("redis:7-alpine")
+            .WithImage("valkey/valkey:9")
             .WithPortBinding(6379, true)
             .Build();
     }
@@ -22,15 +22,15 @@ public class RedisServerFixture : IAsyncLifetime
     public async Task InitializeAsync()
     {
         await _redisContainer.StartAsync();
-        
+
         _redisEndpoint = _redisContainer.GetConnectionString();
-        _mux = await ConnectionMultiplexer.ConnectAsync(new ConfigurationOptions 
-        { 
-            AllowAdmin = true, 
-            AbortOnConnectFail = false, 
+        _mux = await ConnectionMultiplexer.ConnectAsync(new ConfigurationOptions
+        {
+            AllowAdmin = true,
+            AbortOnConnectFail = false,
             EndPoints = { _redisEndpoint }
         });
-        
+
         // Configure keyspace notifications
         var server = _mux.GetServer(_redisEndpoint);
         await server.ConfigSetAsync("notify-keyspace-events", "KEA");
@@ -45,7 +45,7 @@ public class RedisServerFixture : IAsyncLifetime
     {
         if (_mux != null && _mux.IsConnected)
             await _mux.CloseAsync();
-        
+
         await _redisContainer.DisposeAsync();
     }
 
