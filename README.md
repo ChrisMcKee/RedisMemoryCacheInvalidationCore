@@ -117,6 +117,24 @@ InvalidationSettings is the main configuration object
 - __EnableKeySpaceNotifications:bool__ : allow subscribe to keyevents notification `__keyevent*__:`.
 - __InvalidationCallback:Action__ : a callback that is invoked when  `InvalidationStrategy` is set to `External`.
 
+Configuring Redis
+---
+
+```shell
+# Enable keyevent notifications for all event types
+CONFIG SET notify-keyspace-events KEA
+
+# Quick test
+# Terminal 1: Subscribe to all keyevent notifications
+redis-cli PSUBSCRIBE '__keyevent*__:*'
+
+# Terminal 2: Trigger an event
+redis-cli SET foo bar
+redis-cli DEL foo
+
+# You should see the events stream in
+```
+
 When to configure ?
 ---
 Thanks to StackExchange.Redis a persistent connection is established between your application and the redis server.
@@ -124,9 +142,7 @@ That's why it's important to configure it very early at startup : Global.asax, O
 
 ### Examples
 
-
 Once RedisMemoryCacheInvalidation is configured, local cache invalidation is a two-steps process : capturing invalidation messages and handling those notification messages.
-
 
 Sending invalidation messages
 ---
