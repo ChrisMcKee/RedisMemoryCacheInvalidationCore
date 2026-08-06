@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.1;netstandard2.0;net10.0;net48</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;netstandard2.0;net10.0</TargetFrameworks>
     <AssemblyTitle>RedisMemoryCacheInvalidation</AssemblyTitle>
     <Company>RedisMemoryCacheInvalidation - Core</Company>
     <Author>RedisMemoryCacheInvalidation - Core</Author>
@@ -27,13 +27,22 @@
     <PackageProjectUrl>https://github.com/ChrisMcKee/RedisMemoryCacheInvalidationCore</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ChrisMcKee/RedisMemoryCacheInvalidationCore</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-
-    <Version>2.5.0</Version>
-
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageIconUrl></PackageIconUrl>
     <PackageIcon>logo.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Version Condition="'$(Version)' == '' and '$(VersionPrefix)' == ''">2.5.0-beta.1</Version>
+    <AssemblyVersionNumber>0.0.0</AssemblyVersionNumber>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyVersion>$(AssemblyVersionNumber)</AssemblyVersion>
+    <AssemblyFileVersion>$(AssemblyVersionNumber)</AssemblyFileVersion>
+    <InformationalVersion>$(Version)</InformationalVersion>
+    <PackageVersion>$(Version)</PackageVersion>
   </PropertyGroup>
 
   <!-- Package content files -->
